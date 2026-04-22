@@ -176,8 +176,8 @@ android {
         versionName APP_VERSION_NAME
         ndkVersion "21.4.7075529"
         buildConfigField "String", "PROXY_SECRET", System.getenv("PROXY_SECRET")
-        buildConfigField "String", "PROXY_HOST", System.getenv("PROXY_HOST")
-        buildConfigField "int", "PROXY_IP", System.getenv("PROXY_IP")
+        buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT")
+        buildConfigField "String", "PROXY_IP", System.getenv("PROXY_IP")
         buildConfigField "int", "APP_ID", System.getenv("APP_ID")
         buildConfigField "String", "APP_HASH", System.getenv("APP_HASH")}\
 
