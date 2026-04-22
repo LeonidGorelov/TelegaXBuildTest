@@ -170,6 +170,12 @@ android {
         }
     }
 
+    println "PROXY_SECRET = ${System.getenv("PROXY_SECRET")}"
+    println "PROXY_PORT = ${System.getenv("PROXY_PORT")}"
+    println "PROXY_IP = ${System.getenv("PROXY_IP")}"
+    println "APP_ID = ${System.getenv("APP_ID")}"
+    println "APP_HASH = ${System.getenv("APP_HASH")}"
+
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 35
@@ -179,7 +185,7 @@ android {
         buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT")
         buildConfigField "String", "PROXY_IP", System.getenv("PROXY_IP")
         buildConfigField "int", "APP_ID", System.getenv("APP_ID")
-        buildConfigField "String", "APP_HASH", System.getenv("APP_HASH")}\
+        buildConfigField "String", "APP_HASH", System.getenv("APP_HASH")}
 
         multiDexEnabled true
 
