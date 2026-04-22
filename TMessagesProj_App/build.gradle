@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 repositories {
-    mavenCentral()
     google()
+    mavenCentral()
 }
 
 configurations {
@@ -21,24 +22,32 @@ dependencies {
 }
 
 android {
+
+    namespace 'org.telegram.messenger.regular'
     compileSdkVersion 35
     buildToolsVersion '35.0.0'
 
-    defaultConfig.applicationId = APP_PACKAGE
+    println "PROXY_SECRET = ${System.getenv("PROXY_SECRET")}"
+    println "PROXY_PORT = ${System.getenv("PROXY_PORT")}"
+    println "PROXY_IP = ${System.getenv("PROXY_IP")}"
+    println "APP_ID = ${System.getenv("APP_ID")}"
+    println "APP_HASH = ${System.getenv("APP_HASH")}"
 
-    sourceSets.main.jniLibs.srcDirs = ['../TMessagesProj/jni/']
+    defaultConfig {
+        applicationId APP_PACKAGE
+        minSdkVersion 21
+        targetSdkVersion 35
+        versionName APP_VERSION_NAME
+        versionCode Integer.parseInt(APP_VERSION_CODE)
+        ndkVersion "21.4.7075529"
 
-    lintOptions {
-        disable 'MissingTranslation'
-        disable 'ExtraTranslation'
-        disable 'BlockedPrivateApi'
-    }
+        multiDexEnabled true
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-
-        coreLibraryDesugaringEnabled true
+        buildConfigField "String", "PROXY_SECRET", "\"${System.getenv("PROXY_SECRET")}\""
+        buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT") ?: "443"
+        buildConfigField "String", "PROXY_IP", "\"${System.getenv("PROXY_IP")}\""
+        buildConfigField "int", "APP_ID", System.getenv("APP_ID") ?: "0"
+        buildConfigField "String", "APP_HASH", "\"${System.getenv("APP_HASH")}\""
     }
 
     signingConfigs {
@@ -48,7 +57,6 @@ android {
             keyAlias System.getenv("KEY_ALIAS")
             keyPassword System.getenv("KEY_PASSWORD")
         }
-
         release {
             storeFile file("../TMessagesProj/config/release.keystore")
             storePassword System.getenv("KEYSTORE_PASSWORD")
@@ -65,9 +73,9 @@ android {
             applicationIdSuffix ".beta"
             minifyEnabled false
             shrinkResources false
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../TMessagesProj/proguard-rules.pro', '../TMessagesProj/proguard-rules-beta.pro'
-            ndk.debugSymbolLevel = 'FULL'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    '../TMessagesProj/proguard-rules.pro',
+                    '../TMessagesProj/proguard-rules-beta.pro'
         }
 
         standalone {
@@ -77,9 +85,8 @@ android {
             applicationIdSuffix ".web"
             minifyEnabled true
             shrinkResources false
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../TMessagesProj/proguard-rules.pro'
-            ndk.debugSymbolLevel = 'FULL'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    '../TMessagesProj/proguard-rules.pro'
         }
 
         release {
@@ -88,78 +95,39 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources false
-            multiDexEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), '../TMessagesProj/proguard-rules.pro'
-            ndk.debugSymbolLevel = 'FULL'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    '../TMessagesProj/proguard-rules.pro'
         }
-    }
-
-    sourceSets.debug {
-        manifest.srcFile '../TMessagesProj/config/debug/AndroidManifest.xml'
-    }
-
-    sourceSets.standalone {
-        manifest.srcFile '../TMessagesProj/config/release/AndroidManifest.xml'
-    }
-
-    sourceSets.release {
-        manifest.srcFile '../TMessagesProj/config/release/AndroidManifest.xml'
     }
 
     flavorDimensions "minApi"
 
     productFlavors {
         bundleAfat {
-            ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-            }
-            ext {
-                abiVersionCode = 1
-            }
+            ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
+            ext { abiVersionCode = 1 }
             buildConfigField "boolean", "BUNDLE", "true"
         }
+
         bundleAfat_SDK23 {
-            ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-            }
-            sourceSets.debug {
-                manifest.srcFile '../TMessagesProj/config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile '../TMessagesProj/config/release/AndroidManifest_SDK23.xml'
-            }
+            ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
             minSdkVersion 23
-            ext {
-                abiVersionCode = 2
-            }
+            ext { abiVersionCode = 2 }
             buildConfigField "boolean", "BUNDLE", "true"
         }
+
         afat {
-            ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-            }
-            sourceSets.debug {
-                manifest.srcFile '../TMessagesProj/config/debug/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.release {
-                manifest.srcFile '../TMessagesProj/config/release/AndroidManifest_SDK23.xml'
-            }
-            sourceSets.standalone {
-                manifest.srcFile '../TMessagesProj/config/release/AndroidManifest_standalone.xml'
-            }
-            ext {
-                abiVersionCode = 9
-            }
+            ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
+            ext { abiVersionCode = 9 }
             buildConfigField "boolean", "BUNDLE", "false"
         }
     }
 
-    defaultConfig.versionCode = Integer.parseInt(APP_VERSION_CODE)
-
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             outputFileName = "app.apk"
-            output.versionCodeOverride = defaultConfig.versionCode * 10 + variant.productFlavors.get(0).abiVersionCode
+            output.versionCodeOverride =
+                    defaultConfig.versionCode * 10 + variant.productFlavors.get(0).abiVersionCode
         }
     }
 
@@ -170,42 +138,36 @@ android {
         }
     }
 
-    println "PROXY_SECRET = ${System.getenv("PROXY_SECRET")}"
-    println "PROXY_PORT = ${System.getenv("PROXY_PORT")}"
-    println "PROXY_IP = ${System.getenv("PROXY_IP")}"
-    println "APP_ID = ${System.getenv("APP_ID")}"
-    println "APP_HASH = ${System.getenv("APP_HASH")}"
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['../TMessagesProj/jni/']
+        }
+        debug {
+            manifest.srcFile '../TMessagesProj/config/debug/AndroidManifest.xml'
+        }
+        standalone {
+            manifest.srcFile '../TMessagesProj/config/release/AndroidManifest.xml'
+        }
+        release {
+            manifest.srcFile '../TMessagesProj/config/release/AndroidManifest.xml'
+        }
+    }
 
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 35
-        versionName APP_VERSION_NAME
-        ndkVersion "21.4.7075529"
-        buildConfigField "String", "PROXY_SECRET", System.getenv("PROXY_SECRET")
-        buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT")
-        buildConfigField "String", "PROXY_IP", System.getenv("PROXY_IP")
-        buildConfigField "int", "APP_ID", System.getenv("APP_ID")
-        buildConfigField "String", "APP_HASH", System.getenv("APP_HASH")}
-
-        multiDexEnabled true
-
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
-
-        externalNativeBuild {
-            cmake {
-                version '3.10.2'
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21' // , '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
-            }
+    externalNativeBuild {
+        cmake {
+            version '3.10.2'
+            arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21'
         }
     }
 
     buildFeatures {
         buildConfig = true
     }
-    namespace 'org.telegram.messenger.regular'
 
     lintOptions {
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+        disable 'BlockedPrivateApi'
         checkReleaseBuilds false
     }
-
-apply plugin: 'com.google.gms.google-services'
+}
