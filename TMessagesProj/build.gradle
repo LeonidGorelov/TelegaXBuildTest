@@ -104,6 +104,12 @@ android {
         minSdkVersion 21
         targetSdkVersion 35
 
+        buildConfigField "String", "PROXY_SECRET", "\"${System.getenv("PROXY_SECRET")}\""
+        buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT") ?: "443"
+        buildConfigField "String", "PROXY_IP", "\"${System.getenv("PROXY_IP")}\""
+        buildConfigField "int", "APP_ID", System.getenv("APP_ID") ?: "0"
+        buildConfigField "String", "APP_HASH", "\"${System.getenv("APP_HASH")}\""
+
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
         multiDexEnabled true
