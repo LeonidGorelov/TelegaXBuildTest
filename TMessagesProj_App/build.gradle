@@ -101,28 +101,52 @@ android {
         }
     }
 
-    flavorDimensions "minApi"
+    flavorDimensions "minApi", "abi"
 
     productFlavors {
         bundleAfat {
-            ndk { abiFilters "armeabi-v7a" }
+            dimension "minApi"
+            minSdkVersion 21
             ext { abiVersionCode = 1 }
             buildConfigField "boolean", "BUNDLE", "true"
         }
 
         bundleAfat_SDK23 {
-            ndk { abiFilters "armeabi-v7a" }
+            dimension "minApi"
             minSdkVersion 23
             ext { abiVersionCode = 2 }
             buildConfigField "boolean", "BUNDLE", "true"
         }
 
         afat {
-            ndk { abiFilters "armeabi-v7a" }
+            dimension "minApi"
+            minSdkVersion 21
             ext { abiVersionCode = 9 }
             buildConfigField "boolean", "BUNDLE", "false"
         }
+
+        // ---- ABI FLAVORS ----
+        arm7 {
+            dimension "abi"
+            ndk { abiFilters "armeabi-v7a" }
+        }
+
+        arm64 {
+            dimension "abi"
+            ndk { abiFilters "arm64-v8a" }
+        }
+
+        x86 {
+            dimension "abi"
+            ndk { abiFilters "x86" }
+        }
+
+        x86_64 {
+            dimension "abi"
+            ndk { abiFilters "x86_64" }
+        }
     }
+
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->

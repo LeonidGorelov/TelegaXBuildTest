@@ -23,7 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 🔥 ОСВОБОЖДАЕМ 20+ GB
       - name: Free disk space
         run: |
           sudo rm -rf /usr/share/dotnet
@@ -41,11 +40,9 @@ jobs:
           sudo rm -rf /usr/local/lib/android/sdk/ndk
           sudo apt-get clean
 
-      # 🔥 УДАЛЯЕМ КЭШ GRADLE
       - name: Remove Gradle cache
         run: rm -rf ~/.gradle/caches/
 
-      # 🔥 ОТКЛЮЧАЕМ DAEMON И КЭШ
       - name: Disable Gradle daemon
         run: |
           mkdir -p ~/.gradle
@@ -61,17 +58,41 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # 🔥 ДЕКОДИРУЕМ KEYSTORE
       - name: Decode keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
 
-      # 🔥 СБОРКА ARM‑7
-      - name: Build Release (ARMv7 only)
-        run: ./gradlew assembleAfatRelease --no-daemon --no-build-cache --stacktrace --info
+      - name: Build ARMv7
+        run: ./gradlew assembleArm7Release --no-daemon --no-build-cache --stacktrace --info
 
-      # 🔥 АРТЕФАКТ
-      - name: Upload APK
+      - name: Upload ARMv7 APK
         uses: actions/upload-artifact@v4
         with:
-          name: TelegaX-arm7-release
-          path: TMessagesProj_App/build/outputs/apk/afat/release/*.apk
+          name: TelegaX-arm7
+          path: TMessagesProj_App/build/outputs/apk/arm7/release/*.apk
+
+      - name: Build ARM64
+        run: ./gradlew assembleArm64Release --no-daemon --no-build-cache --stacktrace --info
+
+      - name: Upload ARM64 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TelegaX-arm64
+          path: TMessagesProj_App/build/outputs/apk/arm64/release/*.apk
+
+      - name: Build X86
+        run: ./gradlew assembleX86Release --no-daemon --no-build-cache --stacktrace --info
+
+      - name: Upload X86 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TelegaX-x86
+          path: TMessagesProj_App/build/outputs/apk/x86/release/*.apk
+
+      - name: Build X86_64
+        run: ./gradlew assembleX86_64Release --no-daemon --no-build-cache --stacktrace --info
+
+      - name: Upload X86_64 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TelegaX-x86_64
+          path: TMessagesProj_App/build/outputs/apk/x86_64/release/*.apk

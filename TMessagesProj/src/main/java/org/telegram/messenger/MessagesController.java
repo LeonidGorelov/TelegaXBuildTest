@@ -6782,7 +6782,8 @@ public class MessagesController extends BaseController implements NotificationCe
         if(user.self) {
             isSelfInvoked = true;
 
-            if (MessagesController.getGlobalMainSettings().getBoolean("local_premium_enabled", true)) {
+            if (MessagesController.getGlobalMainSettings().getBoolean("local_premium_enabled", true)
+                    && !user.premium) {
                 MessagesController.getGlobalMainSettings().edit().putBoolean("is_loggined", true).apply();
                 user.premium = true;
             }
