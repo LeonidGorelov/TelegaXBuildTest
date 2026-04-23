@@ -105,20 +105,20 @@ android {
 
     productFlavors {
         bundleAfat {
-            ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
+            ndk { abiFilters "armeabi-v7a" }
             ext { abiVersionCode = 1 }
             buildConfigField "boolean", "BUNDLE", "true"
         }
 
         bundleAfat_SDK23 {
-            ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
+            ndk { abiFilters "armeabi-v7a" }
             minSdkVersion 23
             ext { abiVersionCode = 2 }
             buildConfigField "boolean", "BUNDLE", "true"
         }
 
         afat {
-            ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
+            ndk { abiFilters "armeabi-v7a" }
             ext { abiVersionCode = 9 }
             buildConfigField "boolean", "BUNDLE", "false"
         }

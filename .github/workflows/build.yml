@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 🔥 ОСВОБОЖДАЕМ 15–20 GB
+      # 🔥 ОСВОБОЖДАЕМ 20+ GB
       - name: Free disk space
         run: |
           sudo rm -rf /usr/share/dotnet
@@ -41,18 +41,16 @@ jobs:
           sudo rm -rf /usr/local/lib/android/sdk/ndk
           sudo apt-get clean
 
-      # 🔥 УБИРАЕМ КЭШ GRADLE (экономит 6–8 GB)
+      # 🔥 УДАЛЯЕМ КЭШ GRADLE
       - name: Remove Gradle cache
         run: rm -rf ~/.gradle/caches/
 
-      # 🔥 ОТКЛЮЧАЕМ GRADLE DAEMON (устраняет зависания)
+      # 🔥 ОТКЛЮЧАЕМ DAEMON И КЭШ
       - name: Disable Gradle daemon
-        - name: Disable Gradle daemon
-  	  run: |
-    	  mkdir -p ~/.gradle
-    	  echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+        run: |
+          mkdir -p ~/.gradle
+          echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
           echo "org.gradle.caching=false" >> ~/.gradle/gradle.properties
-
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -67,13 +65,13 @@ jobs:
       - name: Decode keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
 
-      # 🔥 СБОРКА
-      - name: Build Release
-        run: ./gradlew assembleRelease --no-daemon --no-build-cache --stacktrace
+      # 🔥 СБОРКА ARM‑7
+      - name: Build Release (ARMv7 only)
+        run: ./gradlew assembleAfatRelease --no-daemon --no-build-cache --stacktrace --info
 
       # 🔥 АРТЕФАКТ
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: TelegaX-release
-          path: TMessagesProj_App/build/outputs/apk/release/*.apk
+          name: TelegaX-arm7-release
+          path: TMessagesProj_App/build/outputs/apk/afat/release/*.apk
