@@ -23,21 +23,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 🔥 ОСВОБОЖДАЕМ 10–12 GB ДИСКА
       - name: Free disk space
-  run: |
-    sudo rm -rf /usr/share/dotnet
-    sudo rm -rf /opt/ghc
-    sudo rm -rf /usr/local/share/boost
-    sudo rm -rf /usr/local/share/powershell
-    sudo rm -rf /usr/local/share/chromium
-    sudo rm -rf /usr/local/share/miniconda
-    sudo rm -rf /usr/local/share/swift
-    sudo rm -rf /usr/local/lib/node_modules
-    sudo apt-get clean
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf /usr/local/share/powershell
+          sudo rm -rf /usr/local/share/chromium
+          sudo rm -rf /usr/local/share/miniconda
+          sudo rm -rf /usr/local/share/swift
+          sudo rm -rf /usr/local/lib/node_modules
+          sudo apt-get clean
 
-
-      # 🔥 УБИРАЕМ КЭШ GRADLE (экономит 6–8 GB)
       - name: Remove Gradle cache
         run: rm -rf ~/.gradle/caches/
 
@@ -50,15 +47,12 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # 🔥 ДЕКОДИРУЕМ KEYSTORE
       - name: Decode keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
 
-      # 🔥 СБОРКА
       - name: Build Release
         run: ./gradlew clean assembleRelease --no-daemon --warning-mode all
 
-      # 🔥 АРТЕФАКТ
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
