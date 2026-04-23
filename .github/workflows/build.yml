@@ -51,7 +51,7 @@ jobs:
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
 
       - name: Build Release
-        run: ./gradlew clean assembleRelease --no-daemon --warning-mode all
+        run: ./gradlew clean assembleRelease --no-daemon --stacktrace --info
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
