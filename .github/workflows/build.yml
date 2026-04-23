@@ -62,37 +62,37 @@ jobs:
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
 
       - name: Build ARMv7
-        run: ./gradlew assembleArm7Release --no-daemon --no-build-cache --stacktrace --info
+        run: ./gradlew assembleAfatArm7Release --no-daemon --no-build-cache --stacktrace --info
 
       - name: Upload ARMv7 APK
         uses: actions/upload-artifact@v4
         with:
           name: TelegaX-arm7
-          path: TMessagesProj_App/build/outputs/apk/arm7/release/*.apk
+          path: TMessagesProj_App/build/outputs/apk/afatArm7/release/*.apk
 
       - name: Build ARM64
-        run: ./gradlew assembleArm64Release --no-daemon --no-build-cache --stacktrace --info
+        run: ./gradlew assembleAfatArm64Release --no-daemon --no-build-cache --stacktrace --info
 
       - name: Upload ARM64 APK
         uses: actions/upload-artifact@v4
         with:
           name: TelegaX-arm64
-          path: TMessagesProj_App/build/outputs/apk/arm64/release/*.apk
+          path: TMessagesProj_App/build/outputs/apk/afatArm64/release/*.apk
 
       - name: Build X86
-        run: ./gradlew assembleX86Release --no-daemon --no-build-cache --stacktrace --info
+        run: ./gradlew assembleAfatX86Release --no-daemon --no-build-cache --stacktrace --info
 
       - name: Upload X86 APK
         uses: actions/upload-artifact@v4
         with:
           name: TelegaX-x86
-          path: TMessagesProj_App/build/outputs/apk/x86/release/*.apk
+          path: TMessagesProj_App/build/outputs/apk/afatX86/release/*.apk
 
       - name: Build X86_64
-        run: ./gradlew assembleX86_64Release --no-daemon --no-build-cache --stacktrace --info
+        run: ./gradlew assembleAfatX86_64Release --no-daemon --no-build-cache --stacktrace --info
 
       - name: Upload X86_64 APK
         uses: actions/upload-artifact@v4
         with:
           name: TelegaX-x86_64
-          path: TMessagesProj_App/build/outputs/apk/x86_64/release/*.apk
+          path: TMessagesProj_App/build/outputs/apk/afatX86_64/release/*.apk
