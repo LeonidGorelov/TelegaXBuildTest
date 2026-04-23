@@ -33,13 +33,6 @@ android {
     compileSdkVersion 35
     buildToolsVersion '35.0.0'
 
-    buildConfigField "int", "APP_ID", System.getenv("APP_ID") ?: "0"
-    buildConfigField "String", "APP_HASH", "\"${System.getenv("APP_HASH")}\""
-    buildConfigField "String", "PROXY_IP", "\"${System.getenv("PROXY_IP")}\""
-    buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT") ?: "443"
-    buildConfigField "String", "PROXY_SECRET", "\"${System.getenv("PROXY_SECRET")}\""
-
-
     defaultConfig {
         applicationId APP_PACKAGE
         minSdkVersion 21
@@ -47,6 +40,13 @@ android {
         versionName APP_VERSION_NAME
         versionCode Integer.parseInt(APP_VERSION_CODE)
         ndkVersion "21.4.7075529"
+
+        buildConfigField "int", "APP_ID", System.getenv("APP_ID") ?: "0"
+        buildConfigField "String", "APP_HASH", "\"${System.getenv("APP_HASH")}\""
+        buildConfigField "String", "PROXY_IP", "\"${System.getenv("PROXY_IP")}\""
+        buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT") ?: "443"
+        buildConfigField "String", "PROXY_SECRET", "\"${System.getenv("PROXY_SECRET")}\""
+
 
         multiDexEnabled true
     }
