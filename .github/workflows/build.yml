@@ -25,18 +25,17 @@ jobs:
 
       # 🔥 ОСВОБОЖДАЕМ 10–12 GB ДИСКА
       - name: Free disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /usr/local/share/boost
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /usr/local/lib/node_modules
-          sudo rm -rf /usr/local/share/powershell
-          sudo rm -rf /usr/local/share/chromium
-          sudo rm -rf /usr/local/share/miniconda
-          sudo rm -rf /usr/local/share/swift
-          sudo rm -rf /usr/local/share/gradle-*
-          sudo apt-get clean
+  run: |
+    sudo rm -rf /usr/share/dotnet
+    sudo rm -rf /opt/ghc
+    sudo rm -rf /usr/local/share/boost
+    sudo rm -rf /usr/local/share/powershell
+    sudo rm -rf /usr/local/share/chromium
+    sudo rm -rf /usr/local/share/miniconda
+    sudo rm -rf /usr/local/share/swift
+    sudo rm -rf /usr/local/lib/node_modules
+    sudo apt-get clean
+
 
       # 🔥 УБИРАЕМ КЭШ GRADLE (экономит 6–8 GB)
       - name: Remove Gradle cache
