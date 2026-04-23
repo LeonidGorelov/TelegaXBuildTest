@@ -33,11 +33,12 @@ android {
     compileSdkVersion 35
     buildToolsVersion '35.0.0'
 
-    println "PROXY_SECRET = ${System.getenv("PROXY_SECRET")}"
-    println "PROXY_PORT = ${System.getenv("PROXY_PORT")}"
-    println "PROXY_IP = ${System.getenv("PROXY_IP")}"
-    println "APP_ID = ${System.getenv("APP_ID")}"
-    println "APP_HASH = ${System.getenv("APP_HASH")}"
+    buildConfigField "int", "APP_ID", System.getenv("APP_ID") ?: "0"
+    buildConfigField "String", "APP_HASH", "\"${System.getenv("APP_HASH")}\""
+    buildConfigField "String", "PROXY_IP", "\"${System.getenv("PROXY_IP")}\""
+    buildConfigField "int", "PROXY_PORT", System.getenv("PROXY_PORT") ?: "443"
+    buildConfigField "String", "PROXY_SECRET", "\"${System.getenv("PROXY_SECRET")}\""
+
 
     defaultConfig {
         applicationId APP_PACKAGE
