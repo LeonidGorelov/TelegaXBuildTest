@@ -23,6 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 🔥 ОСВОБОЖДАЕМ 15–20 GB
       - name: Free disk space
         run: |
           sudo rm -rf /usr/share/dotnet
@@ -33,10 +34,22 @@ jobs:
           sudo rm -rf /usr/local/share/miniconda
           sudo rm -rf /usr/local/share/swift
           sudo rm -rf /usr/local/lib/node_modules
+          sudo rm -rf /usr/local/lib/heroku
+          sudo rm -rf /usr/local/lib/android/sdk/system-images
+          sudo rm -rf /usr/local/lib/android/sdk/emulator
+          sudo rm -rf /usr/local/lib/android/sdk/ndk-bundle
+          sudo rm -rf /usr/local/lib/android/sdk/ndk
           sudo apt-get clean
 
+      # 🔥 УБИРАЕМ КЭШ GRADLE (экономит 6–8 GB)
       - name: Remove Gradle cache
         run: rm -rf ~/.gradle/caches/
+
+      # 🔥 ОТКЛЮЧАЕМ GRADLE DAEMON (устраняет зависания)
+      - name: Disable Gradle daemon
+        run: |
+          echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+          echo "org.gradle.caching=false" >> ~/.gradle/gradle.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -47,12 +60,15 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      # 🔥 ДЕКОДИРУЕМ KEYSTORE
       - name: Decode keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
 
+      # 🔥 СБОРКА
       - name: Build Release
-        run: ./gradlew clean assembleRelease --no-daemon --stacktrace --info
+        run: ./gradlew assembleRelease --no-daemon --no-build-cache --stacktrace
 
+      # 🔥 АРТЕФАКТ
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
