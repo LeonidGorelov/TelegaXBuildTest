@@ -47,9 +47,12 @@ jobs:
 
       # 🔥 ОТКЛЮЧАЕМ GRADLE DAEMON (устраняет зависания)
       - name: Disable Gradle daemon
-        run: |
-          echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+        - name: Disable Gradle daemon
+  	  run: |
+    	  mkdir -p ~/.gradle
+    	  echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
           echo "org.gradle.caching=false" >> ~/.gradle/gradle.properties
+
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
