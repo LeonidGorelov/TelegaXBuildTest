@@ -10,7 +10,9 @@ package org.telegram.messenger;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -283,6 +285,7 @@ public class ApplicationLoader extends Application {
         applicationLoaderInstance = this;
         try {
             applicationContext = getApplicationContext();
+
         } catch (Throwable ignore) {
 
         }
@@ -344,6 +347,7 @@ public class ApplicationLoader extends Application {
 
         LauncherIconController.tryFixLauncherIconIfNeeded();
         ProxyRotationController.init();
+        AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
     }
 
     public static void startPushService() {
@@ -352,10 +356,16 @@ public class ApplicationLoader extends Application {
         if (preferences.contains("pushService")) {
             enabled = preferences.getBoolean("pushService", true);
         } else {
-            enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", false);
+            enabled = MessagesController.getMainSettings(UserConfig.selectedAccount).getBoolean("keepAliveService", true);
         }
         if (enabled) {
             try {
+                AlarmManager am = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
+                Intent i = new Intent(applicationContext, NotificationsService.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, i, PendingIntent.FLAG_MUTABLE);
+
+                am.cancel(pendingIntent);
+                am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
             } catch (Throwable ignore) {
 

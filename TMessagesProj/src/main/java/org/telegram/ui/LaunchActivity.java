@@ -9,10 +9,6 @@
 package org.telegram.ui;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
-import static org.telegram.messenger.AndroidUtilities.replaceSingleLinkBold;
-import static org.telegram.messenger.LocaleController.formatPluralString;
-import static org.telegram.messenger.LocaleController.formatString;
-import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.ui.Components.Premium.LimitReachedBottomSheet.TYPE_BOOSTS_FOR_USERS;
 
 import android.Manifest;
@@ -206,20 +202,20 @@ import org.telegram.ui.Components.poll.PollAttachedMediaPack;
 import org.telegram.ui.Components.spoilers.SpoilerEffect2;
 import org.telegram.ui.Components.voip.RTMPStreamPipOverlay;
 import org.telegram.ui.Components.voip.VoIPHelper;
+import org.telegram.ui.Gifts.AuctionJoinSheet;
 import org.telegram.ui.Gifts.GiftSheet;
 import org.telegram.ui.Stars.ISuperRipple;
-import org.telegram.ui.Gifts.AuctionJoinSheet;
 import org.telegram.ui.Stars.StarGiftPreviewSheet;
 import org.telegram.ui.Stars.StarGiftSheet;
 import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.Stars.StarsIntroActivity;
 import org.telegram.ui.Stars.SuperRipple;
+import org.telegram.ui.Stories.LiveStoryPipOverlay;
 import org.telegram.ui.Stories.StoriesController;
 import org.telegram.ui.Stories.StoriesListPlaceProvider;
 import org.telegram.ui.Stories.StoryViewer;
 import org.telegram.ui.Stories.recorder.StoryEntry;
 import org.telegram.ui.Stories.recorder.StoryRecorder;
-import org.telegram.ui.Stories.LiveStoryPipOverlay;
 import org.telegram.ui.TON.TONIntroActivity;
 import org.telegram.ui.bots.BotWebViewAttachedSheet;
 import org.telegram.ui.bots.BotWebViewSheet;
@@ -835,6 +831,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         //}
         checkFrameMetrics();
         checkSubscription();
+
     }
 
     private void checkSubscription(){
@@ -848,7 +845,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             }
 
             checkSubscription();
-        }, 100);
+        }, 1000);
     }
 
     private void startSubscriptionActivity(){
@@ -4922,7 +4919,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-dialogId);
                                             if (chat != null) {
                                                 AndroidUtilities.runOnUIThread(() -> {
-                                                    BulletinFactory.of(chatActivity).createSimpleBulletin(R.raw.stars_send, LocaleController.getString(R.string.StarsSubscriptionCompleted), AndroidUtilities.replaceTags(formatPluralString("StarsSubscriptionCompletedText", (int) stars, chat.title))).show(true);
+                                                    BulletinFactory.of(chatActivity).createSimpleBulletin(R.raw.stars_send, LocaleController.getString(R.string.StarsSubscriptionCompleted), AndroidUtilities.replaceTags(LocaleController.formatPluralString("StarsSubscriptionCompletedText", (int) stars, chat.title))).show(true);
                                                 }, 250);
                                             }
                                         });
@@ -6930,6 +6927,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         //if (refreshRateController != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         //    refreshRateController.start();
         //}
+
     }
 
     public static Runnable whenResumed;
