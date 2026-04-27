@@ -360,12 +360,12 @@ public class ApplicationLoader extends Application {
         }
         if (enabled) {
             try {
-                AlarmManager am = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
+                /*AlarmManager am = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
                 Intent i = new Intent(applicationContext, NotificationsService.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, i, PendingIntent.FLAG_MUTABLE);
 
                 am.cancel(pendingIntent);
-                am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
+                am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);*/
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
             } catch (Throwable ignore) {
 
