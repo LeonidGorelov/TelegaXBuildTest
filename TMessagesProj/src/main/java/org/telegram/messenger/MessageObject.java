@@ -7071,10 +7071,24 @@ public class MessageObject {
         }
     }
 
-    public CharSequence getVoiceTranscription() {
+	public CharSequence getVoiceTranscription() {
         if (messageOwner == null || messageOwner.voiceTranscription == null) {
             return null;
         }
+
+        File file;
+
+
+        if (getMedia(messageOwner) instanceof TLRPC.TL_messageMediaWebPage) {
+
+            file = FileLoader.getInstance(currentAccount).getPathToAttach(getMedia(messageOwner).webpage.document, true);
+        }
+        else{
+         file = FileLoader.getInstance(currentAccount).getPathToAttach(getMedia(messageOwner).document, true);
+        }
+
+        Log.d("FILE", "Voice path: " + file.getAbsolutePath());
+
         if (TextUtils.isEmpty(messageOwner.voiceTranscription)) {
             SpannableString ssb = new SpannableString(getString(R.string.NoWordsRecognized));
             ssb.setSpan(new CharacterStyle() {
