@@ -41,6 +41,7 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
@@ -7071,7 +7072,7 @@ public class MessageObject {
         }
     }
 
-	public CharSequence getVoiceTranscription() {
+    public CharSequence getVoiceTranscription() {
         if (messageOwner == null || messageOwner.voiceTranscription == null) {
             return null;
         }
