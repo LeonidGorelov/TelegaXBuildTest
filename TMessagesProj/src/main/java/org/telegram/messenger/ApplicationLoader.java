@@ -52,6 +52,8 @@ import java.util.Locale;
 
 public class ApplicationLoader extends Application {
 
+    private static PendingIntent pendingIntent;
+
     public static ApplicationLoader applicationLoaderInstance;
 
     @SuppressLint("StaticFieldLeak")
@@ -360,18 +362,25 @@ public class ApplicationLoader extends Application {
         }
         if (enabled) {
             try {
-                /*AlarmManager am = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
+                AlarmManager am = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
                 Intent i = new Intent(applicationContext, NotificationsService.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, i, PendingIntent.FLAG_MUTABLE);
+                pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, i, PendingIntent.FLAG_MUTABLE);
 
                 am.cancel(pendingIntent);
-                am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);*/
+                am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
             } catch (Throwable ignore) {
 
             }
         } else {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
+
+            PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), PendingIntent.FLAG_MUTABLE);
+            AlarmManager alarm = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
+            alarm.cancel(pintent);
+            if (pendingIntent != null) {
+                alarm.cancel(pendingIntent);
+            }
         }
     }
 

@@ -3140,11 +3140,22 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         actionBar.getAdditionalSubTitleOverlayContainer().setTranslationX(dp(4));
         actionBar.getAdditionalSubTitleOverlayContainer().setTranslationY(-dp(3));
 
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+            @Override
+            public void onItemClick(int id) {
+                if(id == 1001){
+                    presentFragment(new NewsFeedActivity());
+                }
+            }
+        });
+        actionBar.createMenu().addItem(1001, R.drawable.ic_reply_icon);
         if (inPreviewMode || AndroidUtilities.isTablet() && folderId != 0 && !isArchive()) {
             actionBar.setOccupyStatusBar(false);
         }
         return actionBar;
     }
+
+
 
     @Override
     public void setTitleOverlayText(String title, int titleId, Runnable action) {
