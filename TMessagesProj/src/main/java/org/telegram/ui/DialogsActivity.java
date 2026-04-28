@@ -10730,8 +10730,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (dialogsType == DIALOGS_TYPE_ADD_USERS_TO) {
             ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(messagesController.dialogsCanAddUsers.size() + messagesController.dialogsMyChannels.size() + messagesController.dialogsMyGroups.size() + 2);
 
-            TLRPC.Dialog feedDialog = new TLRPC.Dialog();
-            feedDialog.id = 777000777L;
+            TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
+            feedDialog.id = (int)777000777;
             feedDialog.top_message = 1;
             feedDialog.unread_count = 0;
             feedDialog.flags = 1;

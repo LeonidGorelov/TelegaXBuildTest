@@ -2048,8 +2048,8 @@ public class MessagesController extends BaseController implements NotificationCe
             LongSparseArray<TLRPC.User> usersDict = new LongSparseArray<>();
             LongSparseArray<TLRPC.Chat> chatsDict = new LongSparseArray<>();
 
-            TLRPC.Chat feedChat = new TLRPC.Chat();
-            feedChat.id = -777000777;
+            TLRPC.Chat feedChat = new TLRPC.TL_chat();
+            feedChat.id = (int)-777000777;
             feedChat.title = "News Feed";
             feedChat.photo = null;
             feedChat.left = false;
