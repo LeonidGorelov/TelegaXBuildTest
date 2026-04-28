@@ -1,11 +1,10 @@
 package org.telegram.ui;
 
-import static org.telegram.messenger.utils.FrameTickScheduler.callback;
-
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import org.telegram.tgnet.TLRPC;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
