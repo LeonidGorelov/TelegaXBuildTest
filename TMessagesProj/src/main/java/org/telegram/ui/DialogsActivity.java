@@ -3140,15 +3140,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         actionBar.getAdditionalSubTitleOverlayContainer().setTranslationX(dp(4));
         actionBar.getAdditionalSubTitleOverlayContainer().setTranslationY(-dp(3));
 
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
-            @Override
-            public void onItemClick(int id) {
-                if(id == 1001){
-                    presentFragment(new NewsFeedActivity());
-                }
-            }
-        });
-        actionBar.createMenu().addItem(1001, R.drawable.ic_reply_icon);
         if (inPreviewMode || AndroidUtilities.isTablet() && folderId != 0 && !isArchive()) {
             actionBar.setOccupyStatusBar(false);
         }
@@ -4343,6 +4334,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     return;
                 if (view instanceof DialogCell && ((DialogCell) view).isBlocked()) {
                     showPremiumBlockedToast(view, ((DialogCell) view).getDialogId());
+                    return;
+                }
+                if (viewPage.dialogsAdapter.getItemId(position) == 777000777L) {
+                    presentFragment(new NewsFeedActivity());
                     return;
                 }
                 if (clickSelectsDialog()) {
@@ -10734,6 +10729,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return messagesController.dialogsServerOnly;
         } else if (dialogsType == DIALOGS_TYPE_ADD_USERS_TO) {
             ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(messagesController.dialogsCanAddUsers.size() + messagesController.dialogsMyChannels.size() + messagesController.dialogsMyGroups.size() + 2);
+
+            TLRPC.Dialog feedDialog = new TLRPC.Dialog();
+            feedDialog.id = 777000777L;
+            feedDialog.top_message = 1;
+            feedDialog.unread_count = 0;
+            feedDialog.flags = 1;
+
+            dialogs.add(0, feedDialog);
+
             if (messagesController.dialogsMyChannels.size() > 0 && allowChannels) {
                 dialogs.add(new DialogsHeader(DialogsHeader.HEADER_TYPE_MY_CHANNELS));
                 dialogs.addAll(messagesController.dialogsMyChannels);

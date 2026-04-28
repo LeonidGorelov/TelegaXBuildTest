@@ -2048,6 +2048,14 @@ public class MessagesController extends BaseController implements NotificationCe
             LongSparseArray<TLRPC.User> usersDict = new LongSparseArray<>();
             LongSparseArray<TLRPC.Chat> chatsDict = new LongSparseArray<>();
 
+            TLRPC.Chat feedChat = new TLRPC.Chat();
+            feedChat.id = -777000777;
+            feedChat.title = "News Feed";
+            feedChat.photo = null;
+            feedChat.left = false;
+
+            chatsDict.put(feedChat.id, feedChat);
+
             for (int a = 0; a < pinnedDialogs.users.size(); a++) {
                 TLRPC.User u = pinnedDialogs.users.get(a);
                 usersDict.put(u.id, u);
