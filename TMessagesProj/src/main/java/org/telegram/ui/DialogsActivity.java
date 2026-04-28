@@ -10717,6 +10717,31 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private ArrayList<TLRPC.Dialog> botShareDialogs;
 
+    private void addNewsFeedDialog(ArrayList<TLRPC.Dialog> dialogs) {
+        long FEED_DIALOG_ID = 777000777L;
+
+        TLRPC.Chat feedChat = new TLRPC.TL_chat();
+        feedChat.id = (int)-FEED_DIALOG_ID;
+        feedChat.title = "News Feed";
+        feedChat.left = false;
+
+        MessagesController.getInstance(currentAccount).chatsDict.put(feedChat.id, feedChat);
+
+        TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
+        feedDialog.id = FEED_DIALOG_ID;
+        feedDialog.top_message = 1;
+        feedDialog.unread_count = 0;
+        feedDialog.flags = 1;
+
+        feedDialog.peer = new TLRPC.TL_dialogPeer();
+        feedDialog.peer.peer = new TLRPC.TL_peerChat();
+        feedDialog.peer.peer.chat_id = feedChat.id;
+
+        MessagesController.getInstance(currentAccount).dialogs_dict.put(feedDialog.id, feedDialog);
+
+        dialogs.add(0, feedDialog);
+    }
+
     @NonNull
     public ArrayList<TLRPC.Dialog> getDialogsArray(int currentAccount, int dialogsType, int folderId, boolean frozen) {
         if (frozen && frozenDialogsList != null) {
@@ -10724,19 +10749,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         MessagesController messagesController = AccountInstance.getInstance(currentAccount).getMessagesController();
         if (dialogsType == DIALOGS_TYPE_DEFAULT) {
-            return messagesController.getDialogs(folderId);
+            ArrayList<TLRPC.Dialog> dialogs = messagesController.getDialogs(folderId);
+            addNewsFeedDialog(dialogs);
+            return dialogs;
         } else if (dialogsType == DIALOGS_TYPE_WIDGET || dialogsType == DIALOGS_TYPE_IMPORT_HISTORY) {
             return messagesController.dialogsServerOnly;
         } else if (dialogsType == DIALOGS_TYPE_ADD_USERS_TO) {
             ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(messagesController.dialogsCanAddUsers.size() + messagesController.dialogsMyChannels.size() + messagesController.dialogsMyGroups.size() + 2);
-
-            TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
-            feedDialog.id = (int)777000777;
-            feedDialog.top_message = 1;
-            feedDialog.unread_count = 0;
-            feedDialog.flags = 1;
-
-            dialogs.add(0, feedDialog);
 
             if (messagesController.dialogsMyChannels.size() > 0 && allowChannels) {
                 dialogs.add(new DialogsHeader(DialogsHeader.HEADER_TYPE_MY_CHANNELS));
