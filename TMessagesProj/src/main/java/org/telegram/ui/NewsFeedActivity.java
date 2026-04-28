@@ -80,7 +80,7 @@ public class NewsFeedActivity extends BaseFragment {
         getNotificationCenter().addObserver(delegate, NotificationCenter.didReceiveNewMessages);
 
         loadNewsFeedMessages(currentAccount, channelIds, 500, (messages) ->{
-            NewsFeedAdapter adapter = new NewsFeedAdapter(context, this, messages, currentAccount);
+            NewsFeedAdapter adapter = new NewsFeedAdapter(context, this, new ArrayList<>(messages), currentAccount);
             listView.setAdapter(adapter);
             ((FrameLayout) fragmentView).addView(listView);
         });
@@ -97,9 +97,10 @@ public class NewsFeedActivity extends BaseFragment {
     }
 
 
-    public void loadNewsFeedMessages(int currentAccount, List<Long> channelIds, int limit, Consumer<ArrayList<MessageObject>> callback) {
+    public void loadNewsFeedMessages(int currentAccount, List<Long> channelIds, int limit, Consumer<List<MessageObject>> callback) {
 
         if (channelIds == null || channelIds.isEmpty()) {
+            callback.accept(Collections.emptyList());
             return;
         }
 
@@ -149,6 +150,7 @@ public class NewsFeedActivity extends BaseFragment {
                 FileLog.e(e);
             }
 
+            // Возвращаем результат в UI
             AndroidUtilities.runOnUIThread(() -> callback.accept(result));
         });
     }
