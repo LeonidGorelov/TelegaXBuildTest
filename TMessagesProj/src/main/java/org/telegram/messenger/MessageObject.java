@@ -97,8 +97,6 @@ import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.Stars.StarsIntroActivity;
 import org.telegram.ui.Stories.StoriesController;
 import org.telegram.ui.web.BotWebViewContainer;
-import org.vosk.Model;
-import org.vosk.Recognizer;
 
 import java.io.BufferedReader;
 import java.io.File;
