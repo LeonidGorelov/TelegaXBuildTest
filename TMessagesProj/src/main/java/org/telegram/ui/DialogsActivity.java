@@ -10717,15 +10717,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private ArrayList<TLRPC.Dialog> botShareDialogs;
 
-    private void addNewsFeedDialog(ArrayList<TLRPC.Dialog> dialogs) {
+    private void addNewsFeedDialog(MessagesController messagesController, ArrayList<TLRPC.Dialog> dialogs) {
         long FEED_DIALOG_ID = 777000777L;
 
         TLRPC.Chat feedChat = new TLRPC.TL_chat();
-        feedChat.id = (int)-FEED_DIALOG_ID;
+        feedChat.id = -FEED_DIALOG_ID;
         feedChat.title = "News Feed";
         feedChat.left = false;
-
-        MessagesController.getInstance(currentAccount).chatsDict.put(feedChat.id, feedChat);
 
         TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
         feedDialog.id = FEED_DIALOG_ID;
@@ -10733,14 +10731,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         feedDialog.unread_count = 0;
         feedDialog.flags = 1;
 
-        feedDialog.peer = new TLRPC.TL_dialogPeer();
-        feedDialog.peer.peer = new TLRPC.TL_peerChat();
-        feedDialog.peer.peer.chat_id = feedChat.id;
+        feedDialog.peer = new TLRPC.TL_peerChat();
+        feedDialog.peer.chat_id = feedChat.id;
 
-        MessagesController.getInstance(currentAccount).dialogs_dict.put(feedDialog.id, feedDialog);
+        messagesController.dialogs_dict.put(feedDialog.id, feedDialog);
+
+        messagesController.putChat(feedChat, true);
 
         dialogs.add(0, feedDialog);
     }
+
 
     @NonNull
     public ArrayList<TLRPC.Dialog> getDialogsArray(int currentAccount, int dialogsType, int folderId, boolean frozen) {
