@@ -735,7 +735,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     ConnectionsManager.getInstance(currentAccount).setPushConnectionEnabled(false);
                 }
             } else if(position == notificationServiceTelegaXRow){
-                SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
+                SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
                 enabled = preferences.getBoolean("useNotificationServiceTelegaX", getMessagesController().useNotificationServiceTelegaX);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("useNotificationServiceTelegaX", !enabled);
