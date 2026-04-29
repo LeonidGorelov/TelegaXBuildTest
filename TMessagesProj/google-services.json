@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:577988123619:android:c408f6c4a02805e5219ed6",
         "android_client_info": {
-          "package_name": "org.telegram.messenger"
+          "package_name": "ru.leonidgorelov.telegax"
         }
       },
       "oauth_client": [],

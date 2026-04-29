@@ -830,7 +830,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         //    refreshRateController = new RefreshRateController(this);
         //}
         checkFrameMetrics();
-        checkSubscription();
+        initSubscriptionCheck();
 
     }
 
@@ -839,13 +839,23 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
 
             if ((chat == null || chat.left) &&
-                    UserConfig.getInstance(currentAccount).isClientActivated() && !isSubscriptionActivityStarted){
+                    UserConfig.getInstance(currentAccount).isClientActivated() && !isSubscriptionActivityStarted &&
+            !MessagesController.getInstance(currentAccount).getChats().isEmpty()){
                 isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
             }
 
             checkSubscription();
         }, 1000);
+    }
+
+    private void initSubscriptionCheck() {
+        NotificationCenter.getInstance(currentAccount).addObserver((id, account, args) -> {
+            if (id == NotificationCenter.dialogsNeedReload && !isSubscriptionActivityStarted) {
+                isSubscriptionActivityStarted = true;
+                checkSubscription();
+            }
+        }, NotificationCenter.dialogsNeedReload);
     }
 
     private void startSubscriptionActivity(){
