@@ -10720,10 +10720,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private void addNewsFeedDialog(MessagesController messagesController, ArrayList<TLRPC.Dialog> dialogs) {
         long FEED_DIALOG_ID = 777000777L;
 
-        TLRPC.Chat feedChat = new TLRPC.TL_chat();
-        feedChat.id = -FEED_DIALOG_ID;
+        TLRPC.TL_chat feedChat = new TLRPC.TL_chat();
+        feedChat.id = (int) -FEED_DIALOG_ID;
         feedChat.title = "News Feed";
         feedChat.left = false;
+        feedChat.version = 1;
+        feedChat.participants_count = 1;
+        feedChat.flags = 1;
+        feedChat.creator = false;
+        feedChat.megagroup = false;
+        feedChat.broadcast = false;
+        feedChat.photo = null;
 
         TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
         feedDialog.id = FEED_DIALOG_ID;
