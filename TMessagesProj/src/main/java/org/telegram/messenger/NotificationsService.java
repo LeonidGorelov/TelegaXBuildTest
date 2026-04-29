@@ -51,7 +51,8 @@ public class NotificationsService extends Service {
 
         ApplicationLoader.postInitApplication();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (MessagesController.getGlobalNotificationsSettings().getBoolean("useNotificationServiceTelegaX", false) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             NotificationChannelCompat channel = new NotificationChannelCompat.Builder(
                     CHANNEL_ID,
