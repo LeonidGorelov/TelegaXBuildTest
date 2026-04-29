@@ -102,6 +102,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
 
     private int notificationsServiceRow;
     private int notificationsServiceConnectionRow;
+    private int notificationServiceTelegaXRow;
 
     private int notificationsSectionRow;
     @Keep
@@ -214,6 +215,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         otherSectionRow = rowCount++;
         notificationsServiceRow = rowCount++;
         notificationsServiceConnectionRow = rowCount++;
+        notificationServiceTelegaXRow = rowCount++;
         androidAutoAlertRow = -1;
         repeatRow = rowCount++;
         resetSection2Row = rowCount++;
@@ -732,6 +734,11 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 } else {
                     ConnectionsManager.getInstance(currentAccount).setPushConnectionEnabled(false);
                 }
+            } else if(position == notificationServiceTelegaXRow){
+                SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+                enabled = preferences.getBoolean("useNotificationServiceTelegaX", getMessagesController().useNotificationServiceTelegaX);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("useNotificationServiceTelegaX", !enabled);
             } else if (position == accountsAllRow) {
                 SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
                 enabled = preferences.getBoolean("AllAccounts", true);
@@ -1017,6 +1024,8 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         checkCell.setTextAndValueAndCheck(getString("NotificationsService", R.string.NotificationsService), getString("NotificationsServiceInfo", R.string.NotificationsServiceInfo), preferences.getBoolean("pushService", getMessagesController().keepAliveService), true, true);
                     } else if (position == notificationsServiceConnectionRow) {
                         checkCell.setTextAndValueAndCheck(getString("NotificationsServiceConnection", R.string.NotificationsServiceConnection), getString("NotificationsServiceConnectionInfo", R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", getMessagesController().backgroundConnection), true, true);
+                    } else if(position == notificationServiceTelegaXRow){
+                        checkCell.setTextAndValueAndCheck("Use notification service Telega X", "Use service to get notifications", preferences.getBoolean("useNotificationServiceTelegaX", getMessagesController().useNotificationServiceTelegaX), true, true);
                     } else if (position == badgeNumberShowRow) {
                         checkCell.setTextAndCheck(getString("BadgeNumberShow", R.string.BadgeNumberShow), getNotificationsController().showBadgeNumber, true);
                     } else if (position == badgeNumberMutedRow) {
@@ -1196,7 +1205,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     position == notificationsSectionRow || position == accountsSectionRow) {
                 return 0;
             } else if (position == inappSoundRow || position == inappVibrateRow || position == notificationsServiceConnectionRow ||
-                    position == inappPreviewRow || position == contactJoinedRow || position == pinnedMessageRow ||
+                    || position == notificationServiceTelegaXRow || position == inappPreviewRow || position == contactJoinedRow || position == pinnedMessageRow ||
                     position == notificationsServiceRow || position == badgeNumberMutedRow || position == badgeNumberMessagesRow ||
                     position == badgeNumberShowRow || position == inappPriorityRow || position == inchatSoundRow ||
                     position == androidAutoAlertRow || position == accountsAllRow) {

@@ -530,6 +530,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public String youtubePipType;
     public boolean keepAliveService;
     public boolean backgroundConnection;
+    public boolean useNotificationServiceTelegaX;
     public float animatedEmojisZoom;
     public boolean filtersEnabled;
     public boolean getfileExperimentalParams;
@@ -1560,6 +1561,7 @@ public class MessagesController extends BaseController implements NotificationCe
         youtubePipType = mainPreferences.getString("youtubePipType", "disabled");
         keepAliveService = mainPreferences.getBoolean("keepAliveService", false);
         backgroundConnection = mainPreferences.getBoolean("keepAliveService", false);
+        useNotificationServiceTelegaX = mainPreferences.getBoolean("useNotificationServiceTelegaX", false);
         promoDialogId = mainPreferences.getLong("proxy_dialog", 0);
         nextPromoInfoCheckTime = mainPreferences.getInt("nextPromoInfoCheckTime", 0);
         promoDialogType = mainPreferences.getInt("promo_dialog_type", 0);
