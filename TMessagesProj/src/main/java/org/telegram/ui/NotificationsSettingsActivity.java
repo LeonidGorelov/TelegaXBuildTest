@@ -740,8 +740,10 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("useNotificationServiceTelegaX", !enabled);
                 editor.commit();
-                TextCheckCell cell = (TextCheckCell) ((ViewGroup) view).getChildAt(0);
-                cell.setChecked(enabled);
+                View child = ((ViewGroup) view).getChildAt(0);
+                if (child instanceof TextCheckCell) {
+                    ((TextCheckCell) child).setChecked(!enabled);
+                }
             } else if (position == accountsAllRow) {
                 SharedPreferences preferences = MessagesController.getGlobalNotificationsSettings();
                 enabled = preferences.getBoolean("AllAccounts", true);
