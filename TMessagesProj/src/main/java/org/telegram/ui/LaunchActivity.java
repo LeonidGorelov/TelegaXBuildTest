@@ -836,18 +836,24 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     private void checkSubscription(){
         AndroidUtilities.runOnUIThread(() ->{
+            if(isSubscriptionActivityStarted)
+                return;
+            
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
 
             if ((chat == null || chat.left) && UserConfig.getInstance(currentAccount).isClientActivated()){
+                isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
+                return;
             }
+
+            checkSubscription();
         }, 1000);
     }
 
     private void initSubscriptionCheck() {
         NotificationCenter.getInstance(currentAccount).addObserver((id, account, args) -> {
-            if (id == NotificationCenter.dialogsNeedReload && !isSubscriptionActivityStarted) {
-                isSubscriptionActivityStarted = true;
+            if (id == NotificationCenter.dialogsNeedReload) {
                 checkSubscription();
             }
         }, NotificationCenter.dialogsNeedReload);
