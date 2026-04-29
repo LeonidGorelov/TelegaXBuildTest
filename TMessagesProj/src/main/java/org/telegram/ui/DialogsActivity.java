@@ -10750,7 +10750,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         MessagesController messagesController = AccountInstance.getInstance(currentAccount).getMessagesController();
         if (dialogsType == DIALOGS_TYPE_DEFAULT) {
             ArrayList<TLRPC.Dialog> dialogs = messagesController.getDialogs(folderId);
-            addNewsFeedDialog(dialogs);
+            addNewsFeedDialog(messagesController, dialogs);
             return dialogs;
         } else if (dialogsType == DIALOGS_TYPE_WIDGET || dialogsType == DIALOGS_TYPE_IMPORT_HISTORY) {
             return messagesController.dialogsServerOnly;
