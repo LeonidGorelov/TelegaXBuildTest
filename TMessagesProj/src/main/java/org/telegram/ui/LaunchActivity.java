@@ -838,10 +838,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         AndroidUtilities.runOnUIThread(() ->{
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
 
-            if ((chat == null || chat.left) &&
-                    UserConfig.getInstance(currentAccount).isClientActivated() && !isSubscriptionActivityStarted &&
-            !MessagesController.getInstance(currentAccount).getChats().isEmpty()){
-                isSubscriptionActivityStarted = true;
+            if ((chat == null || chat.left) && UserConfig.getInstance(currentAccount).isClientActivated()){
                 startSubscriptionActivity();
             }
 
