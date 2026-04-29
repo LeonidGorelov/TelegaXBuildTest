@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="UseNotificationServiceTelegaX">Use notification service Telega X</string>
+    <string name="UseNotificationServiceTelegaXDescription">Use the service to receive notifications without FCM</string>
     <string name="LocalPremiumEnabled">Enable local premium</string>
     <string name="HidePremiumIcon">Hide premium icon</string>
     <string name="UseProxy">Use proxy</string>

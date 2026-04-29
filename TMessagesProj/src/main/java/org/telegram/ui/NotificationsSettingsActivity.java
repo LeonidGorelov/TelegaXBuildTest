@@ -735,7 +735,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     ConnectionsManager.getInstance(currentAccount).setPushConnectionEnabled(false);
                 }
             } else if(position == notificationServiceTelegaXRow){
-                SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+                SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
                 enabled = preferences.getBoolean("useNotificationServiceTelegaX", getMessagesController().useNotificationServiceTelegaX);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean("useNotificationServiceTelegaX", !enabled);
@@ -1025,7 +1025,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (position == notificationsServiceConnectionRow) {
                         checkCell.setTextAndValueAndCheck(getString("NotificationsServiceConnection", R.string.NotificationsServiceConnection), getString("NotificationsServiceConnectionInfo", R.string.NotificationsServiceConnectionInfo), preferences.getBoolean("pushConnection", getMessagesController().backgroundConnection), true, true);
                     } else if(position == notificationServiceTelegaXRow){
-                        checkCell.setTextAndValueAndCheck("Use notification service Telega X", "Use service to get notifications", preferences.getBoolean("useNotificationServiceTelegaX", getMessagesController().useNotificationServiceTelegaX), true, true);
+                        checkCell.setTextAndValueAndCheck(getString(R.string.UseNotificationServiceTelegaX), getString(R.string.UseNotificationServiceTelegaXDescription), preferences.getBoolean("useNotificationServiceTelegaX", getMessagesController().useNotificationServiceTelegaX), true, true);
                     } else if (position == badgeNumberShowRow) {
                         checkCell.setTextAndCheck(getString("BadgeNumberShow", R.string.BadgeNumberShow), getNotificationsController().showBadgeNumber, true);
                     } else if (position == badgeNumberMutedRow) {
