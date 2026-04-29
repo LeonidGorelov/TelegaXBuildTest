@@ -10721,31 +10721,56 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         long FEED_DIALOG_ID = 777000777L;
 
         TLRPC.Chat feedChat = new TLRPC.TL_chat();
-        feedChat.id = (int) -FEED_DIALOG_ID;
+        feedChat.id = -FEED_DIALOG_ID;
         feedChat.title = "News Feed";
-        feedChat.left = false;
-        feedChat.version = 1;
-        feedChat.participants_count = 1;
         feedChat.flags = 1;
+        feedChat.flags2 = 0;
         feedChat.creator = false;
-        feedChat.megagroup = false;
+        feedChat.kicked = false;
+        feedChat.deactivated = false;
+        feedChat.left = false;
+        feedChat.has_geo = false;
+        feedChat.slowmode_enabled = false;
+        feedChat.participants_count = 1;
+        feedChat.version = 1;
         feedChat.broadcast = false;
-        feedChat.photo = null;
+        feedChat.megagroup = false;
+        feedChat.restricted = false;
+        feedChat.min = false;
+        feedChat.fake = false;
+        feedChat.scam = false;
+        feedChat.has_link = false;
+        feedChat.explicit_content = false;
+        feedChat.call_active = false;
+        feedChat.call_not_empty = false;
+        feedChat.gigagroup = false;
+        feedChat.noforwards = false;
+        feedChat.forum = false;
+        feedChat.username = null;
+        feedChat.photo = new TLRPC.TL_chatPhotoEmpty();
+
+        messagesController.putChat(feedChat, true);
+
 
         TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
         feedDialog.id = FEED_DIALOG_ID;
+        feedDialog.flags = 1;
         feedDialog.top_message = 1;
         feedDialog.unread_count = 0;
-        feedDialog.flags = 1;
-
+        feedDialog.unread_mentions_count = 0;
+        feedDialog.unread_reactions_count = 0;
+        feedDialog.unread_poll_votes_count = 0;
+        feedDialog.folder_id = 0;
+        feedDialog.ttl_period = 0;
+        feedDialog.pinned = false;
+        feedDialog.unread_mark = false;
+        feedDialog.view_forum_as_messages = false;
         feedDialog.peer = new TLRPC.TL_peerChat();
         feedDialog.peer.chat_id = feedChat.id;
 
         messagesController.dialogs_dict.put(feedDialog.id, feedDialog);
-
-        messagesController.putChat(feedChat, true);
-
         dialogs.add(feedDialog);
+
     }
 
 
