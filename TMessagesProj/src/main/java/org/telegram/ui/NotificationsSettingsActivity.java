@@ -1205,7 +1205,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     position == notificationsSectionRow || position == accountsSectionRow) {
                 return 0;
             } else if (position == inappSoundRow || position == inappVibrateRow || position == notificationsServiceConnectionRow ||
-                    || position == notificationServiceTelegaXRow || position == inappPreviewRow || position == contactJoinedRow || position == pinnedMessageRow ||
+                    position == notificationServiceTelegaXRow || position == inappPreviewRow || position == contactJoinedRow || position == pinnedMessageRow ||
                     position == notificationsServiceRow || position == badgeNumberMutedRow || position == badgeNumberMessagesRow ||
                     position == badgeNumberShowRow || position == inappPriorityRow || position == inchatSoundRow ||
                     position == androidAutoAlertRow || position == accountsAllRow) {
