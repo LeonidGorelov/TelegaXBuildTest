@@ -10717,7 +10717,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private ArrayList<TLRPC.Dialog> botShareDialogs;
 
+    private static boolean newsFeedAdded;
+
     private void addNewsFeedDialog(MessagesController messagesController, ArrayList<TLRPC.Dialog> dialogs) {
+        newsFeedAdded = true;
+
         int currentAccount = UserConfig.selectedAccount;
 
         long FEED_ID = 777000777L;
@@ -10796,7 +10800,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         MessagesController messagesController = AccountInstance.getInstance(currentAccount).getMessagesController();
         if (dialogsType == DIALOGS_TYPE_DEFAULT) {
             ArrayList<TLRPC.Dialog> dialogs = messagesController.getDialogs(folderId);
-            addNewsFeedDialog(messagesController, dialogs);
+            if(!newsFeedAdded){
+                addNewsFeedDialog(messagesController, dialogs);
+            }
             getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);
             return dialogs;
         } else if (dialogsType == DIALOGS_TYPE_WIDGET || dialogsType == DIALOGS_TYPE_IMPORT_HISTORY) {
