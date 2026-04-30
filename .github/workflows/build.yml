@@ -170,8 +170,8 @@ jobs:
         with:
           name: FCM-Beta-TelegaX-${{ env.VERSION }}
           path: |
-            FCM-Beta-TelegaX-${{ env.VERSION }}-arm7.apk
-            FCM-Beta-TelegaX-${{ env.VERSION }}-arm64.apk
-            FCM-Beta-TelegaX-${{ env.VERSION }}-x86.apk
-            FCM-Beta-TelegaX-${{ env.VERSION }}-x86_64.apk
+            FCM-Web-TelegaX-${{ env.VERSION }}-arm7.apk
+            FCM-Web-TelegaX-${{ env.VERSION }}-arm64.apk
+            FCM-Web-TelegaX-${{ env.VERSION }}-x86.apk
+            FCM-Web-TelegaX-${{ env.VERSION }}-x86_64.apk
 
