@@ -8,8 +8,6 @@
 
 package org.telegram.messenger;
 
-import static org.telegram.messenger.PushListenerController.PUSH_TYPE_FIREBASE;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -38,7 +36,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONObject;
 import org.telegram.messenger.voip.VideoCapturerDevice;
@@ -351,13 +348,6 @@ public class ApplicationLoader extends Application {
         LauncherIconController.tryFixLauncherIconIfNeeded();
         ProxyRotationController.init();
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
-
-        FirebaseMessaging.getInstance().getToken()
-                .addOnSuccessListener(token -> {
-                    PushListenerController.sendRegistrationToServer(PUSH_TYPE_FIREBASE, token);
-                });
-        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-
     }
 
     public static void startPushService() {

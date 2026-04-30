@@ -116,7 +116,7 @@ public class PushListenerController {
                 String loc_key = null;
                 String jsonString = null;
                 try {
-                    byte[] bytes = Base64.decode(data, Base64.URL_SAFE);
+                    /*byte[] bytes = Base64.decode(data, Base64.URL_SAFE);
                     NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
                     buffer.writeBytes(bytes);
                     buffer.position(0);
@@ -155,6 +155,8 @@ public class PushListenerController {
                     byte[] strBytes = new byte[len];
                     buffer.readBytes(strBytes, true);
                     jsonString = new String(strBytes);
+                    JSONObject json = new JSONObject(jsonString);*/
+                    jsonString = data;
                     JSONObject json = new JSONObject(jsonString);
 
                     if (ApplicationLoader.applicationLoaderInstance != null && ApplicationLoader.applicationLoaderInstance.consumePush(currentAccount, json)) {

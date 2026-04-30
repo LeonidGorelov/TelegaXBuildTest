@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:577988123619:android:c408f6c4a02805e5219ed6",
+        "mobilesdk_app_id": "1:577988123619:android:3913708499c3c5dd219ed6",
         "android_client_info": {
           "package_name": "ru.leonidgorelov.telegax"
         }
@@ -26,9 +26,28 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:577988123619:android:5b54e4fb622a52d8219ed6",
+        "mobilesdk_app_id": "1:577988123619:android:9fc24c6c07a7c722219ed6",
         "android_client_info": {
-          "package_name": "org.telegram.messenger.beta"
+          "package_name": "ru.leonidgorelov.telegax.beta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm6iqB4nl6CzvKbOMS2Ond2oJaMC1rGNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577988123619:android:91e3471c8c68d06a219ed6",
+        "android_client_info": {
+          "package_name": "ru.leonidgorelov.telegax.web"
         }
       },
       "oauth_client": [],

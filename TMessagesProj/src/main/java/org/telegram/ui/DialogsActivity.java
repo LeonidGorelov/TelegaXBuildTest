@@ -10718,60 +10718,74 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private ArrayList<TLRPC.Dialog> botShareDialogs;
 
     private void addNewsFeedDialog(MessagesController messagesController, ArrayList<TLRPC.Dialog> dialogs) {
-        long FEED_DIALOG_ID = 777000777L;
+        int currentAccount = UserConfig.selectedAccount;
+
+        long FEED_ID = 777000777L;
+        long DIALOG_ID = -FEED_ID;
 
         TLRPC.Chat feedChat = new TLRPC.TL_chat();
-        feedChat.id = -FEED_DIALOG_ID;
+        feedChat.id = (int) FEED_ID;
         feedChat.title = "News Feed";
         feedChat.flags = 1;
-        feedChat.flags2 = 0;
-        feedChat.creator = false;
-        feedChat.kicked = false;
-        feedChat.deactivated = false;
-        feedChat.left = false;
-        feedChat.has_geo = false;
-        feedChat.slowmode_enabled = false;
         feedChat.participants_count = 1;
         feedChat.version = 1;
-        feedChat.broadcast = false;
-        feedChat.megagroup = false;
-        feedChat.restricted = false;
-        feedChat.min = false;
-        feedChat.fake = false;
-        feedChat.scam = false;
-        feedChat.has_link = false;
-        feedChat.explicit_content = false;
-        feedChat.call_active = false;
-        feedChat.call_not_empty = false;
-        feedChat.gigagroup = false;
-        feedChat.noforwards = false;
-        feedChat.forum = false;
-        feedChat.username = null;
         feedChat.photo = new TLRPC.TL_chatPhotoEmpty();
 
         messagesController.putChat(feedChat, true);
 
+        MessagesStorage.getInstance(currentAccount)
+                .putUsersAndChats(null, Collections.singletonList(feedChat), true, true);
 
         TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
-        feedDialog.id = FEED_DIALOG_ID;
+        feedDialog.id = DIALOG_ID;
         feedDialog.flags = 1;
         feedDialog.top_message = 1;
         feedDialog.unread_count = 0;
-        feedDialog.unread_mentions_count = 0;
-        feedDialog.unread_reactions_count = 0;
-        feedDialog.unread_poll_votes_count = 0;
-        feedDialog.folder_id = 0;
-        feedDialog.ttl_period = 0;
-        feedDialog.pinned = false;
-        feedDialog.unread_mark = false;
-        feedDialog.view_forum_as_messages = false;
+
         feedDialog.peer = new TLRPC.TL_peerChat();
         feedDialog.peer.chat_id = feedChat.id;
 
-        messagesController.dialogs_dict.put(feedDialog.id, feedDialog);
+        TLRPC.messages_Dialogs dialogsObj = new TLRPC.TL_messages_dialogs();
+        dialogsObj.dialogs = new ArrayList<>();
+        dialogsObj.chats = new ArrayList<>();
+        dialogsObj.users = new ArrayList<>();
+
+        dialogsObj.dialogs.add(feedDialog);
+        dialogsObj.chats.add(feedChat);
+
+        MessagesStorage.getInstance(currentAccount)
+                .putDialogs(dialogsObj, 0);
+
+        TLRPC.Message fake = new TLRPC.TL_message();
+        fake.id = 1;
+        fake.date = (int) (System.currentTimeMillis() / 1000);
+        fake.dialog_id = DIALOG_ID;
+        fake.message = "Welcome to News Feed";
+        fake.peer_id = new TLRPC.TL_peerChat();
+        fake.peer_id.chat_id = feedChat.id;
+        fake.from_id = fake.peer_id;
+        fake.flags |= 256;
+        fake.out = false;
+        fake.silent = true;
+        fake.media = new TLRPC.TL_messageMediaEmpty();
+
+        ArrayList<TLRPC.Message> msgList = new ArrayList<>();
+        msgList.add(fake);
+
+        MessagesStorage.getInstance(currentAccount)
+                .putMessages(msgList, false, true, false, 0, 0, 0);
+
+        messagesController.dialogs_dict.put(DIALOG_ID, feedDialog);
         dialogs.add(feedDialog);
 
+        messagesController.sortDialogs(null);
+
+        NotificationCenter.getInstance(currentAccount)
+                .postNotificationName(NotificationCenter.dialogsNeedReload);
     }
+
+
+
 
 
     @NonNull
@@ -10782,7 +10796,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         MessagesController messagesController = AccountInstance.getInstance(currentAccount).getMessagesController();
         if (dialogsType == DIALOGS_TYPE_DEFAULT) {
             ArrayList<TLRPC.Dialog> dialogs = messagesController.getDialogs(folderId);
-            //addNewsFeedDialog(messagesController, dialogs);
+            addNewsFeedDialog(messagesController, dialogs);
             getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);
             return dialogs;
         } else if (dialogsType == DIALOGS_TYPE_WIDGET || dialogsType == DIALOGS_TYPE_IMPORT_HISTORY) {
