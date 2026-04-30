@@ -106,8 +106,8 @@ jobs:
 
       - name: Use FCM google-services.json
         run: |
-          cp configs/google-services-TelegaX-FCM.json TMessagesProj/google-services.json
-          cp configs/google-services-TelegaX-FCM.json TMessagesProj_App/google-services.json
+          cp configs/google-services-TelegaX-App-FCM.json TMessagesProj/google-services.json
+          cp configs/google-services-TelegaX-App-FCM.json TMessagesProj_App/google-services.json
 
       - name: Build FCM ARMv7
         run: ./gradlew assembleAfatArm7Release --no-daemon --no-build-cache
@@ -143,8 +143,8 @@ jobs:
 
       - name: Use FCM Web google-services.json
         run: |
-          cp configs/google-services-TelegaX-FCM.json TMessagesProj/google-services.json
-          cp configs/google-services-TelegaX-FCM.json TMessagesProj_App/google-services.json
+          cp configs/google-services-App-TelegaX-FCM.json TMessagesProj/google-services.json
+          cp configs/google-services-App-TelegaX-FCM.json TMessagesProj_App/google-services.json
 
       - name: Build FCM Web ARMv7
         run: ./gradlew assembleAfatArm7Release --no-daemon --no-build-cache
