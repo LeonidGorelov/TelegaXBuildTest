@@ -146,16 +146,16 @@ jobs:
           cp configs/google-services-TelegaX-FCM.json TMessagesProj/google-services.json
           cp configs/google-services-App-TelegaX-FCM.json TMessagesProj_App/google-services.json
 
-      - name: Build FCM Beta ARMv7
+      - name: Build FCM Web ARMv7
         run: ./gradlew assembleAfatArm7Release --no-daemon --no-build-cache
 
-      - name: Build FCM Beta ARM64
+      - name: Build FCM Web ARM64
         run: ./gradlew assembleAfatArm64Release --no-daemon --no-build-cache
 
-      - name: Build FCM Beta X86
+      - name: Build FCM Web X86
         run: ./gradlew assembleAfatX86Release --no-daemon --no-build-cache
 
-      - name: Build FCM Beta X86_64
+      - name: Build FCM Web X86_64
         run: ./gradlew assembleAfatX86_64Release --no-daemon --no-build-cache
 
       - name: Rename FCM Web APKs
@@ -165,10 +165,10 @@ jobs:
           mv TMessagesProj_App/build/outputs/apk/afatX86/release/*.apk FCM-Web-TelegaX-${VERSION}-x86.apk
           mv TMessagesProj_App/build/outputs/apk/afatX86_64/release/*.apk FCM-Web-TelegaX-${VERSION}-x86_64.apk
 
-      - name: Upload FCM Beta APKs
+      - name: Upload FCM Web APKs
         uses: actions/upload-artifact@v4
         with:
-          name: FCM-Beta-TelegaX-${{ env.VERSION }}
+          name: FCM-Web-TelegaX-${{ env.VERSION }}
           path: |
             FCM-Web-TelegaX-${{ env.VERSION }}-arm7.apk
             FCM-Web-TelegaX-${{ env.VERSION }}-arm64.apk
