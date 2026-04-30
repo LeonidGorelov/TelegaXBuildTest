@@ -10762,7 +10762,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         TLRPC.Message fake = new TLRPC.TL_message();
         fake.id = 1;
-        fake.date = (int) (System.currentTimeMillis() / 1000);
+        fake.date = 1;
         fake.dialog_id = DIALOG_ID;
         fake.message = "Welcome to News Feed";
         fake.peer_id = new TLRPC.TL_peerChat();

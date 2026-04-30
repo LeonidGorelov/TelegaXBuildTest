@@ -4,9 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import org.telegram.tgnet.TLRPC;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.telegram.SQLite.SQLiteCursor;
@@ -18,27 +15,35 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.NativeByteBuffer;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Adapters.NewsFeedAdapter;
 import org.telegram.ui.Components.RecyclerListView;
 
-import java.util.function.Consumer;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class NewsFeedActivity extends BaseFragment {
+public class NewsFeedActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
-    private List<Long> channelIds = new ArrayList<>();
     private RecyclerListView listView;
+    private NewsFeedAdapter adapter;
 
+    private final List<Long> channelIds = new ArrayList<>();
+    private final List<MessageObject> feedMessages = new ArrayList<>();
 
+    @Override
+    public boolean onFragmentCreate() {
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.didReceiveNewMessages);
+        return super.onFragmentCreate();
+    }
+
+    @Override
+    public void onFragmentDestroy() {
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.didReceiveNewMessages);
+        super.onFragmentDestroy();
+    }
 
     @Override
     public View createView(Context context) {
@@ -48,58 +53,66 @@ public class NewsFeedActivity extends BaseFragment {
         listView = new RecyclerListView(context);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
+        adapter = new NewsFeedAdapter(context, this, new ArrayList<>(feedMessages), currentAccount);
+        listView.setAdapter(adapter);
+
+        ((FrameLayout) fragmentView).addView(listView);
+
         ArrayList<TLRPC.Dialog> dialogs = MessagesController.getInstance(currentAccount).getDialogs(0);
 
         for (TLRPC.Dialog d : dialogs) {
             if (DialogObject.isChannel(d)) {
-                channelIds.add(d.id);
+                if (!channelIds.contains(d.id)) {
+                    channelIds.add(d.id);
+                }
             }
         }
 
-        final NotificationCenter.NotificationCenterDelegate delegate = (id, account, args) -> {
-            if (id == NotificationCenter.didReceiveNewMessages) {
-
-                ArrayList<MessageObject> newMessages = (ArrayList<MessageObject>) args[1];
-
-                for (MessageObject msg : newMessages) {
-                    long uid = msg.getDialogId();
-
-                    TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(uid);
-
-                    if (DialogObject.isChannel(dialog)) {
-
-                        if (!channelIds.contains(uid)) {
-                            channelIds.add(uid);
-                        }
-                    }
-                }
-            }
-        };
-
-        getNotificationCenter().addObserver(delegate, NotificationCenter.didReceiveNewMessages);
-
-        loadNewsFeedMessages(currentAccount, channelIds, 500, (messages) ->{
-            NewsFeedAdapter adapter = new NewsFeedAdapter(context, this, new ArrayList<>(messages), currentAccount);
-            listView.setAdapter(adapter);
-            ((FrameLayout) fragmentView).addView(listView);
-        });
+        reloadFeed();
 
         return fragmentView;
     }
 
     @Override
-    public boolean onFragmentCreate() {
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.didReceiveNewMessages) {
 
+            @SuppressWarnings("unchecked")
+            ArrayList<MessageObject> newMessages = (ArrayList<MessageObject>) args[1];
 
+            boolean changed = false;
 
-        return super.onFragmentCreate();
+            for (MessageObject msg : newMessages) {
+                long dialogId = msg.getDialogId();
+
+                TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(dialogId);
+
+                if (dialog != null && DialogObject.isChannel(dialog)) {
+                    if (!channelIds.contains(dialogId)) {
+                        channelIds.add(dialogId);
+                        changed = true;
+                    }
+                }
+            }
+
+            if (changed) {
+                reloadFeed();
+            }
+        }
     }
 
+    private void reloadFeed() {
+        loadNewsFeedMessages(currentAccount, channelIds, 500, messages -> {
+            feedMessages.clear();
+            feedMessages.addAll(messages);
+            adapter.notifyDataSetChanged();
+        });
+    }
 
     public void loadNewsFeedMessages(int currentAccount, List<Long> channelIds, int limit, Consumer<List<MessageObject>> callback) {
 
         if (channelIds == null || channelIds.isEmpty()) {
-            callback.accept(Collections.emptyList());
+            callback.accept(new ArrayList<>());
             return;
         }
 
@@ -108,6 +121,7 @@ public class NewsFeedActivity extends BaseFragment {
                 .collect(Collectors.joining(","));
 
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
+
             List<MessageObject> result = new ArrayList<>();
 
             try {
@@ -139,7 +153,6 @@ public class NewsFeedActivity extends BaseFragment {
                     message.dialog_id = uid;
 
                     MessageObject msgObj = new MessageObject(currentAccount, message, false, false);
-
                     result.add(msgObj);
                 }
 
@@ -149,7 +162,6 @@ public class NewsFeedActivity extends BaseFragment {
                 FileLog.e(e);
             }
 
-            // Возвращаем результат в UI
             AndroidUtilities.runOnUIThread(() -> callback.accept(result));
         });
     }
