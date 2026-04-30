@@ -138,10 +138,10 @@ jobs:
             FCM-TelegaX-${{ env.VERSION }}-x86.apk
             FCM-TelegaX-${{ env.VERSION }}-x86_64.apk
 
-      - name: Set package to FCM Beta
-        run: sed -i 's/^APP_PACKAGE=.*/APP_PACKAGE=org.telegram.messenger.beta/' gradle.properties
+      - name: Set package to FCM Web
+        run: sed -i 's/^APP_PACKAGE=.*/APP_PACKAGE=org.telegram.messenger.web/' gradle.properties
 
-      - name: Use FCM Beta google-services.json
+      - name: Use FCM Web google-services.json
         run: |
           cp configs/google-services-TelegaX-FCM.json TMessagesProj/google-services.json
           cp configs/google-services-App-TelegaX-FCM.json TMessagesProj_App/google-services.json
@@ -158,12 +158,12 @@ jobs:
       - name: Build FCM Beta X86_64
         run: ./gradlew assembleAfatX86_64Release --no-daemon --no-build-cache
 
-      - name: Rename FCM Beta APKs
+      - name: Rename FCM Web APKs
         run: |
-          mv TMessagesProj_App/build/outputs/apk/afatArm7/release/*.apk FCM-Beta-TelegaX-${VERSION}-arm7.apk
-          mv TMessagesProj_App/build/outputs/apk/afatArm64/release/*.apk FCM-Beta-TelegaX-${VERSION}-arm64.apk
-          mv TMessagesProj_App/build/outputs/apk/afatX86/release/*.apk FCM-Beta-TelegaX-${VERSION}-x86.apk
-          mv TMessagesProj_App/build/outputs/apk/afatX86_64/release/*.apk FCM-Beta-TelegaX-${VERSION}-x86_64.apk
+          mv TMessagesProj_App/build/outputs/apk/afatArm7/release/*.apk FCM-Web-TelegaX-${VERSION}-arm7.apk
+          mv TMessagesProj_App/build/outputs/apk/afatArm64/release/*.apk FCM-Web-TelegaX-${VERSION}-arm64.apk
+          mv TMessagesProj_App/build/outputs/apk/afatX86/release/*.apk FCM-Web-TelegaX-${VERSION}-x86.apk
+          mv TMessagesProj_App/build/outputs/apk/afatX86_64/release/*.apk FCM-Web-TelegaX-${VERSION}-x86_64.apk
 
       - name: Upload FCM Beta APKs
         uses: actions/upload-artifact@v4
