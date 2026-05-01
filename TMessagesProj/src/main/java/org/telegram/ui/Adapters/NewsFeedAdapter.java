@@ -19,6 +19,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.NewsFeedActivity;
 import org.telegram.ui.ProfileActivity;
@@ -65,18 +66,20 @@ public class NewsFeedAdapter extends RecyclerListView.SelectionAdapter {
 
             @Override
             public void didLongPress(ChatMessageCell cell, float x, float y) {
-                MessageObject msg = cell.getMessageObject();
+                /*MessageObject msg = cell.getMessageObject();
                 if (msg == null) return;
 
                 if (fragment instanceof NewsFeedActivity) {
                     ((NewsFeedActivity) fragment).showMessageContextMenu(msg, cell);
-                }
+                }*/
             }
 
             @Override
             public void didPressUserAvatar(ChatMessageCell cell, TLRPC.User user,float touchX, float touchY, boolean asForward) {
                 if (user == null) return;
-                fragment.presentFragment(new ProfileActivity(user.id));
+                Bundle args = new Bundle();
+                args.putLong("user_id", user.id);
+                fragment.presentFragment(new ProfileActivity(args));
             }
 
             @Override

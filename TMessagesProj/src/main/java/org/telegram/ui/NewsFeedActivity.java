@@ -22,6 +22,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -99,76 +100,6 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
         return fragmentView;
     }
 
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        Context context = parent.getContext();
-
-        ChatMessageCell cell = new ChatMessageCell(context, currentAccount);
-
-        cell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-
-        cell.setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
-
-            @Override
-            public void didPressUrl(ChatMessageCell cell, CharacterStyle url, boolean longPress) {
-                Browser.openUrl(cell.getContext(), url.toString());
-            }
-
-            @Override
-            public void didLongPress(ChatMessageCell cell, float x, float y) {
-                MessageObject msg = cell.getMessageObject();
-                if (msg == null) return;
-
-                // Вызываем наше меню
-                if (fragment instanceof NewsFeedActivity) {
-                    ((NewsFeedActivity) activity).showMessageContextMenu(msg, cell);
-                }
-            }
-
-            public void showMessageContextMenu(MessageObject msg, View anchor) {
-                if (msg == null || getParentActivity() == null) return;
-
-                ChatActivity.MessageMenu menu = new ChatActivity.MessageMenu(
-                        getParentActivity(),
-                        this,
-                        msg,
-                        false,
-                        false
-                );
-
-                menu.show(anchor);
-            }
-
-
-            @Override
-            public void didPressUserAvatar(ChatMessageCell cell, TLRPC.User user,float touchX, float touchY, boolean asForward) {
-                if (user == null) return;
-
-                BaseFragment fragment = parentFragment;
-                if (fragment == null) return;
-
-                fragment.presentFragment(new ProfileActivity(user.id));
-            }
-
-            @Override
-            public void didPressReplyMessage(ChatMessageCell cell, int id, float x, float y, boolean longpress) {
-            }
-
-            @Override
-            public boolean canPerformActions() {
-                return true;
-            }
-        });
-
-        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        cell.setLayoutParams(params);
-
-        return new RecyclerListView.Holder(cell);
-    }
-
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -243,29 +174,19 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
 
                     message.dialog_id = uid;
 
-                    // -----------------------------
-                    // ВАЖНО: получаем канал
-                    // -----------------------------
-                    long channelId = -uid; // uid = -channelId
+                    long channelId = -uid;
                     TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(channelId);
 
                     if (chat == null) {
-                        // подгружаем, если нет
                         MessagesController.getInstance(currentAccount).loadFullChat(channelId, 0, true);
                         chat = MessagesController.getInstance(currentAccount).getChat(channelId);
                     }
 
-                    // -----------------------------
-                    // Создаём словарь чатов
-                    // -----------------------------
                     HashMap<Long, TLRPC.Chat> chatsDict = new HashMap<>();
                     if (chat != null) {
                         chatsDict.put(chat.id, chat);
                     }
 
-                    // -----------------------------
-                    // Создаём MessageObject ПРАВИЛЬНО
-                    // -----------------------------
                     MessageObject msgObj = new MessageObject(currentAccount, message, null, chatsDict, false, false
                     );
 
@@ -283,17 +204,14 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
     }
 
 
-    public void showMessageContextMenu(MessageObject msg, View anchor) {
+    /*public void showMessageContextMenu(MessageObject msg, View anchor) {
         if (msg == null || getParentActivity() == null) return;
 
-        ChatActivity.MessageMenu menu = new ChatActivity.MessageMenu(
-                getParentActivity(),
-                this,
-                msg,
-                false,
-                false
-        );
+        ChatActivity chatActivity = new ChatActivity(null);
+        chatActivity.setCurrentAccount(currentAccount);
 
-        menu.show(anchor);
-    }
+        chatActivity.setMessageObject(msg);
+
+        chatActivity.createMenu(anchor);
+    }*/
 }
