@@ -10717,7 +10717,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private ArrayList<TLRPC.Dialog> botShareDialogs;
 
-    private static boolean newsFeedAdded;
+    private boolean newsFeedAdded;
 
     private void addNewsFeedDialog(MessagesController messagesController, ArrayList<TLRPC.Dialog> dialogs) {
         newsFeedAdded = true;
