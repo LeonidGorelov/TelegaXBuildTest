@@ -4330,16 +4330,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             viewPage.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? RecyclerListView.SCROLLBAR_POSITION_LEFT : RecyclerListView.SCROLLBAR_POSITION_RIGHT);
             viewPage.addView(viewPage.listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             viewPage.listView.setOnItemClickListener((view, position, x, y) -> {
-                if (viewPage.dialogsAdapter.getItemId(position) == -777000777L ||
-                        viewPage.dialogsAdapter.getItemId(position) == 777000777L) {
-                    FileLog.d("NF_CLICK: pos=" + position + " id=" + viewPage.dialogsAdapter.getItemId(position));
-                    presentFragment(new NewsFeedActivity());
-                    return;
-                }
                 Object item = viewPage.dialogsAdapter.getItem(position);
                 if (item instanceof TLRPC.Dialog) {
                     TLRPC.Dialog dialog = (TLRPC.Dialog) item;
-                    FileLog.d("NF_CLICK_DIALOG: id=" + dialog.id + " title=" + dialog.top_message);
                     if (dialog.id == -777000777L) {
                         presentFragment(new NewsFeedActivity());
                         return;

@@ -843,7 +843,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             if ((chat == null || chat.left) && UserConfig.getInstance(currentAccount).isClientActivated()){
                 isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
+                return;
             }
+
+            checkSubscription();
         }, 3000);
     }
 
