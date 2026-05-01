@@ -31,7 +31,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
     private NewsFeedAdapter adapter;
 
     private final List<Long> channelIds = new ArrayList<>();
-    private final List<MessageObject> feedMessages = new ArrayList<>();
+    private final ArrayList<MessageObject> feedMessages = new ArrayList<>();
 
     @Override
     public boolean onFragmentCreate() {
@@ -53,7 +53,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
         listView = new RecyclerListView(context);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
-        adapter = new NewsFeedAdapter(context, this, new ArrayList<>(feedMessages), currentAccount);
+        adapter = new NewsFeedAdapter(context, this, feedMessages, currentAccount);
         listView.setAdapter(adapter);
 
         ((FrameLayout) fragmentView).addView(listView);

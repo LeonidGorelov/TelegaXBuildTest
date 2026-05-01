@@ -4336,7 +4336,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     showPremiumBlockedToast(view, ((DialogCell) view).getDialogId());
                     return;
                 }
-                if (viewPage.dialogsAdapter.getItemId(position) == 777000777L) {
+                if (viewPage.dialogsAdapter.getItemId(position) == -777000777L) {
                     presentFragment(new NewsFeedActivity());
                     return;
                 }
