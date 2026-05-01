@@ -844,7 +844,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
             }
-        });
+        }, 3000);
     }
 
     private void initSubscriptionCheck() {
