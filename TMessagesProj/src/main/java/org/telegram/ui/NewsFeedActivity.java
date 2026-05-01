@@ -62,11 +62,15 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
 
         for (TLRPC.Dialog d : dialogs) {
             if (DialogObject.isChannel(d)) {
-                if (!channelIds.contains(d.id)) {
-                    channelIds.add(d.id);
+                long uid = d.id;
+                if (!channelIds.contains(uid)) {
+                    channelIds.add(uid);
                 }
             }
         }
+
+        log("Dialogs loaded: " + dialogs.size());
+        log("Collected channels: " + channelIds);
 
         reloadFeed();
 
@@ -80,24 +84,21 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
             @SuppressWarnings("unchecked")
             ArrayList<MessageObject> newMessages = (ArrayList<MessageObject>) args[1];
 
-            boolean changed = false;
-
             for (MessageObject msg : newMessages) {
-                long dialogId = msg.getDialogId();
+                long uid = msg.getDialogId();
 
-                TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(dialogId);
+                TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(uid);
 
                 if (dialog != null && DialogObject.isChannel(dialog)) {
-                    if (!channelIds.contains(dialogId)) {
-                        channelIds.add(dialogId);
-                        changed = true;
+                    if (!channelIds.contains(uid)) {
+                        log("New channel detected: " + uid);
+                        channelIds.add(uid);
+                        reloadFeed();
                     }
                 }
             }
 
-            if (changed) {
-                reloadFeed();
-            }
+            log("New messages received: " + newMessages.size());
         }
     }
 
@@ -106,6 +107,8 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
             feedMessages.clear();
             feedMessages.addAll(messages);
             adapter.notifyDataSetChanged();
+
+            log("Reload feed, channelIds = " + channelIds);
         });
     }
 
@@ -131,6 +134,8 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
                                 ") ORDER BY date DESC LIMIT " + limit
                 );
 
+                log("SQL: SELECT ... WHERE uid IN (" + channelIdsSql + ")");
+
                 while (cursor.next()) {
                     int mid = cursor.intValue(0);
                     NativeByteBuffer data = cursor.byteBufferValue(1);
@@ -154,6 +159,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
 
                     MessageObject msgObj = new MessageObject(currentAccount, message, false, false);
                     result.add(msgObj);
+                    log("Loaded msg mid=" + mid + " uid=" + uid + " date=" + date);
                 }
 
                 cursor.dispose();
@@ -162,7 +168,12 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
                 FileLog.e(e);
             }
 
+            log("SQL result count = " + result.size());
             AndroidUtilities.runOnUIThread(() -> callback.accept(result));
         });
+    }
+
+    private void log(String msg) {
+        FileLog.d("NewsFeed: " + msg);
     }
 }
