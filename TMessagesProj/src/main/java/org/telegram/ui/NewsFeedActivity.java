@@ -3,9 +3,11 @@ package org.telegram.ui;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.NewsFeedAdapter;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
@@ -47,12 +50,14 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
     @Override
     public boolean onFragmentCreate() {
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.didReceiveNewMessages);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
         return super.onFragmentCreate();
     }
 
     @Override
     public void onFragmentDestroy() {
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.didReceiveNewMessages);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
         super.onFragmentDestroy();
     }
 
@@ -60,6 +65,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
     public View createView(Context context) {
 
         fragmentView = new FrameLayout(context);
+        listView = new RecyclerListView(context);
 
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
 
@@ -75,14 +81,47 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
             }
         });
 
+        ImageView scrollDownButton = new ImageView(context);
+        scrollDownButton.setImageResource(R.drawable.ic_arrow_drop_down);
+        scrollDownButton.setVisibility(View.GONE);
 
-        listView = new RecyclerListView(context);
+        FrameLayout.LayoutParams params = LayoutHelper.createFrame(
+                48, 48,
+                Gravity.BOTTOM | Gravity.END,
+                0, 0, 16, 16
+        );
+
+        ((FrameLayout) fragmentView).addView(scrollDownButton, params);
+
+        listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager lm = (LinearLayoutManager) listView.getLayoutManager();
+                int lastVisible = lm.findLastVisibleItemPosition();
+
+                int total = adapter.getItemCount() - 1;
+
+                if (lastVisible < total - 3) {
+                    scrollDownButton.setVisibility(View.VISIBLE);
+                } else {
+                    scrollDownButton.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        scrollDownButton.setOnClickListener(v -> {
+            listView.smoothScrollToPosition(adapter.getItemCount() - 1);
+        });
+
         listView.setLayoutManager(new LinearLayoutManager(context));
 
         adapter = new NewsFeedAdapter(context, this, feedMessages, currentAccount);
         listView.setAdapter(adapter);
 
-        ((FrameLayout) fragmentView).addView(listView);
+        ((FrameLayout) fragmentView).addView(listView, LayoutHelper.createFrame(
+                LayoutHelper.MATCH_PARENT,
+                LayoutHelper.MATCH_PARENT
+        ));
 
         ArrayList<TLRPC.Dialog> dialogs = MessagesController.getInstance(currentAccount).getDialogs(0);
 
@@ -121,6 +160,10 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
                 }
             }
         }
+        else if (id == NotificationCenter.chatInfoDidLoad) {
+            reloadFeed();
+        }
+
     }
 
     private void reloadFeed() {
@@ -178,9 +221,18 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
                     TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(channelId);
 
                     if (chat == null) {
-                        MessagesController.getInstance(currentAccount).loadFullChat(channelId, 0, true);
-                        chat = MessagesController.getInstance(currentAccount).getChat(channelId);
+                        TLRPC.Chat dbChat = MessagesStorage.getInstance(currentAccount).getChat(channelId);
+                        if (dbChat != null) {
+                            MessagesController.getInstance(currentAccount).putChat(dbChat, true);
+                            chat = dbChat;
+                        }
                     }
+
+                    if (chat == null) {
+                        MessagesController.getInstance(currentAccount).loadFullChat(channelId, 0, true);
+                        continue;
+                    }
+
 
                     HashMap<Long, TLRPC.Chat> chatsDict = new HashMap<>();
                     if (chat != null) {
@@ -202,7 +254,6 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
             AndroidUtilities.runOnUIThread(() -> callback.accept(result));
         });
     }
-
 
     /*public void showMessageContextMenu(MessageObject msg, View anchor) {
         if (msg == null || getParentActivity() == null) return;

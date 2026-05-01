@@ -65,6 +65,25 @@ public class NewsFeedAdapter extends RecyclerListView.SelectionAdapter {
             }
 
             @Override
+            public void didPressWebPage(ChatMessageCell cell, TLRPC.WebPage webpage, String url, boolean safe) {
+                Browser.openUrl(cell.getContext(), url);
+            }
+
+            @Override
+            public void needOpenWebView(MessageObject message, String url, String title, String description, String originalUrl, int w, int h) {
+                Browser.openUrl(fragment.getParentActivity(), url);
+            }
+
+            @Override
+            public void didPressOther(ChatMessageCell cell, float x, float y) {
+                CharacterStyle span = cell.getUrlAtPosition(x, y);
+                if (span != null) {
+                    Browser.openUrl(cell.getContext(), span.toString());
+                }
+            }
+
+
+            @Override
             public void didLongPress(ChatMessageCell cell, float x, float y) {
                 /*MessageObject msg = cell.getMessageObject();
                 if (msg == null) return;

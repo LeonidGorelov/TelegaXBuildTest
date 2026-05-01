@@ -10784,17 +10784,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 .putMessages(msgList, false, true, false, 0, 0, 0);
 
         messagesController.dialogs_dict.put(DIALOG_ID, feedDialog);
-        dialogs.add(feedDialog);
+        dialogs.add(0, feedDialog);
 
         messagesController.sortDialogs(null);
 
         NotificationCenter.getInstance(currentAccount)
                 .postNotificationName(NotificationCenter.dialogsNeedReload);
     }
-
-
-
-
 
     @NonNull
     public ArrayList<TLRPC.Dialog> getDialogsArray(int currentAccount, int dialogsType, int folderId, boolean frozen) {
