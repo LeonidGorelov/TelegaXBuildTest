@@ -10741,9 +10741,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         messagesController.putChat(feedChat, true);
 
-        MessagesStorage.getInstance(currentAccount)
-                .putUsersAndChats(null, Collections.singletonList(feedChat), true, true);
-
         TLRPC.Dialog feedDialog = new TLRPC.TL_dialog();
         feedDialog.id = DIALOG_ID;
         feedDialog.flags = 1;
@@ -10761,8 +10758,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         dialogsObj.dialogs.add(feedDialog);
         dialogsObj.chats.add(feedChat);
 
-        MessagesStorage.getInstance(currentAccount)
-                .putDialogs(dialogsObj, 0);
 
         TLRPC.Message fake = new TLRPC.TL_message();
         fake.id = 1;
@@ -10780,16 +10775,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         ArrayList<TLRPC.Message> msgList = new ArrayList<>();
         msgList.add(fake);
 
-        MessagesStorage.getInstance(currentAccount)
-                .putMessages(msgList, false, true, false, 0, 0, 0);
-
         messagesController.dialogs_dict.put(DIALOG_ID, feedDialog);
         dialogs.add(0, feedDialog);
-
-        messagesController.sortDialogs(null);
-
-        NotificationCenter.getInstance(currentAccount)
-                .postNotificationName(NotificationCenter.dialogsNeedReload);
     }
 
     @NonNull

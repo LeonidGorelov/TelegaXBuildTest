@@ -136,8 +136,6 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
 
         reloadFeed();
 
-        //listView.smoothScrollToPosition(adapter.getItemCount() - 1);
-
         return fragmentView;
     }
 
@@ -173,6 +171,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
             feedMessages.clear();
             feedMessages.addAll(messages);
             adapter.notifyDataSetChanged();
+            listView.scrollToPosition(feedMessages.size() - 1);
         });
     }
 
