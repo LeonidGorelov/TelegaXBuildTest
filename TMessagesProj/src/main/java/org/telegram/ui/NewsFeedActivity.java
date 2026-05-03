@@ -67,7 +67,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
         fragmentView = new FrameLayout(context);
         listView = new RecyclerListView(context);
 
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
         actionBar.setTitle("News Feed");
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -136,7 +136,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
 
         reloadFeed();
 
-        listView.smoothScrollToPosition(adapter.getItemCount() - 1);
+        //listView.smoothScrollToPosition(adapter.getItemCount() - 1);
 
         return fragmentView;
     }
