@@ -136,6 +136,8 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
 
         reloadFeed();
 
+        listView.smoothScrollToPosition(adapter.getItemCount() - 1);
+
         return fragmentView;
     }
 
@@ -209,6 +211,8 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
                     data.rewind();
 
                     TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                    message.readAttachPath(data, currentAccount);
+
                     data.reuse();
 
                     if (message == null) {
@@ -218,13 +222,13 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
                     message.dialog_id = uid;
 
                     long channelId = -uid;
+
                     TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(channelId);
 
                     if (chat == null) {
-                        TLRPC.Chat dbChat = MessagesStorage.getInstance(currentAccount).getChat(channelId);
-                        if (dbChat != null) {
-                            MessagesController.getInstance(currentAccount).putChat(dbChat, true);
-                            chat = dbChat;
+                        chat = MessagesStorage.getInstance(currentAccount).getChat(channelId);
+                        if (chat != null) {
+                            MessagesController.getInstance(currentAccount).putChat(chat, true);
                         }
                     }
 
@@ -232,6 +236,7 @@ public class NewsFeedActivity extends BaseFragment implements NotificationCenter
                         MessagesController.getInstance(currentAccount).loadFullChat(channelId, 0, true);
                         continue;
                     }
+
 
 
                     HashMap<Long, TLRPC.Chat> chatsDict = new HashMap<>();
