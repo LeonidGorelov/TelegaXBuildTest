@@ -10796,7 +10796,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     dialogs.add(0, feed);
                 }
             }
-            
+
+            TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
+            LaunchActivity.isDialogsContainChannel = channel != null;
+
             getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);
             return dialogs;
         } else if (dialogsType == DIALOGS_TYPE_WIDGET || dialogsType == DIALOGS_TYPE_IMPORT_HISTORY) {

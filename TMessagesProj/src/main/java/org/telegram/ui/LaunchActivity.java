@@ -256,6 +256,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     private boolean finished;
     private static boolean isSubscriptionActivityStarted;
+    public static boolean isDialogsContainChannel = true;
     private String videoPath;
     private String voicePath;
     private String sendingText;
@@ -830,7 +831,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         //    refreshRateController = new RefreshRateController(this);
         //}
         checkFrameMetrics();
-        initSubscriptionCheck();
+        //initSubscriptionCheck();
+        checkSubscription();
     }
 
     private void checkSubscription(){
@@ -840,7 +842,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
 
-            if ((chat == null || chat.left) && UserConfig.getInstance(currentAccount).isClientActivated()){
+            if ((chat == null || chat.left) &&
+                    UserConfig.getInstance(currentAccount).isClientActivated() && !isDialogsContainChannel){
                 isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
                 return;
