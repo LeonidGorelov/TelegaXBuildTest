@@ -10813,6 +10813,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             if(channel == null && !isSubscriptionActivityStarted){
                 startSubscriptionActivity();
+                FileLog.d("Telega X: null or activity not started");
+            }
+            else{
+                if (channel == null){
+                    FileLog.d("Telega X: channel null");
+                }
+                if(isSubscriptionActivityStarted){
+                    FileLog.d("Subscription activity started");
+                }
             }
 
             getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);
