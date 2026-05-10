@@ -727,6 +727,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private AnimatedStatusView animatedStatusView;
     public RightSlidingDialogContainer rightSlidingDialogContainer;
 
+    public static boolean isSubscriptionActivityStarted;
+
     public final Property<DialogsActivity, Float> SCROLL_Y = new AnimationProperties.FloatProperty<DialogsActivity>("animationValue") {
         @Override
         public void setValue(DialogsActivity object, float value) {
@@ -10782,6 +10784,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private void startSubscriptionActivity(){
         AndroidUtilities.runOnUIThread(() ->{
+            isSubscriptionActivityStarted = true;
             Intent intent = new Intent(getParentActivity(), SubscriptionActivity.class);
             getParentActivity().startActivity(intent);
             getParentActivity().finish();
@@ -10809,12 +10812,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
             LaunchActivity.isDialogsContainChannel = channel != null;
 
-            if(channel == null){
-                Log.d("Telega X", "Channel is null");
+            if(channel == null && !isSubscriptionActivityStarted){
                 startSubscriptionActivity();
-            }
-            else{
-                Log.d("Telega X", "Channel not null");
             }
 
             getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);

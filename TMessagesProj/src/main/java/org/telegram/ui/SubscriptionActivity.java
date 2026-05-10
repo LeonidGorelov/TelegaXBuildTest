@@ -135,7 +135,10 @@ public class SubscriptionActivity extends Activity {
         try {
             /*LaunchActivity.isSubscribed = true;
             MessagesController.getGlobalMainSettings().edit().putBoolean("is_subscribed", true).apply();*/
+            DialogsActivity.isSubscriptionActivityStarted = false;
+
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=TelegaX_Ru"));
+            intent.setPackage("ru.leonidgorelov.telegax");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (Exception e) {
