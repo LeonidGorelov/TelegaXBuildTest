@@ -832,7 +832,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         //}
         checkFrameMetrics();
         //initSubscriptionCheck();
-        checkSubscription();
+        //checkSubscription();
     }
 
     private void checkSubscription(){

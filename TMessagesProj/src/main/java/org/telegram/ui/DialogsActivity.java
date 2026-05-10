@@ -57,6 +57,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.Property;
 import android.util.StateSet;
@@ -10779,6 +10780,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         dialogs.add(0, feedDialog);
     }
 
+    private void startSubscriptionActivity(){
+        AndroidUtilities.runOnUIThread(() ->{
+            Intent intent = new Intent(getParentActivity(), SubscriptionActivity.class);
+            getParentActivity().startActivity(intent);
+            getParentActivity().finish();
+        });
+    }
+
     @NonNull
     public ArrayList<TLRPC.Dialog> getDialogsArray(int currentAccount, int dialogsType, int folderId, boolean frozen) {
         if (frozen && frozenDialogsList != null) {
@@ -10799,6 +10808,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
             LaunchActivity.isDialogsContainChannel = channel != null;
+
+            if(channel == null){
+                Log.d("Telega X", "Channel is null");
+                startSubscriptionActivity();
+            }
+            else{
+                Log.d("Telega X", "Channel not null");
+            }
 
             getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);
             return dialogs;
