@@ -12,41 +12,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SubscriptionActivity extends Activity {
 
-    public static SubscriptionActivity instance;
-    private static final long CHANNEL_ID = 3982213462L;
-
-    private View loadingView;
-    private View contentView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
-
         setContentView(createView());
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (instance == this) instance = null;
     }
 
 
@@ -72,7 +56,6 @@ public class SubscriptionActivity extends Activity {
         LinearLayout content = new LinearLayout(context);
         content.setOrientation(LinearLayout.VERTICAL);
         content.setGravity(Gravity.CENTER);
-        contentView = content;
 
         ImageView logo = new ImageView(context);
         logo.setImageDrawable(Theme.dialogs_archiveAvatarDrawable);
@@ -133,10 +116,6 @@ public class SubscriptionActivity extends Activity {
 
     private void openChannel() {
         try {
-            /*LaunchActivity.isSubscribed = true;
-            MessagesController.getGlobalMainSettings().edit().putBoolean("is_subscribed", true).apply();*/
-            DialogsActivity.isSubscriptionActivityStarted = false;
-
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=TelegaX_Ru"));
             intent.setPackage("ru.leonidgorelov.telegax");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
