@@ -842,7 +842,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
 
-            if ((chat == null || chat.left) &&
+            if (/*(chat == null || chat.left) &&*/
                     UserConfig.getInstance(currentAccount).isClientActivated() && !isDialogsContainChannel){
                 isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
