@@ -2768,7 +2768,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
-        Intent intent = getParentActivity().getIntent();
+        /*Intent intent = getParentActivity().getIntent();
         Uri data = intent != null ? intent.getData() : null;
 
         if (data != null) {
@@ -2782,7 +2782,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             else{
                 openedFromDeepLink = false;
             }
-        }
+        }*/
 
         if (arguments != null) {
             onlySelect = arguments.getBoolean("onlySelect", false);
