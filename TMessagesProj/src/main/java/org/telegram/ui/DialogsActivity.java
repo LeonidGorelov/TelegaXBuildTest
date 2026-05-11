@@ -10782,8 +10782,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void startSubscriptionActivity(){
-        /*if(isSubscriptionActivityStarted)
-            return;*/
+        if(isSubscriptionActivityStarted || getParentActivity() == null)
+            return;
 
         AndroidUtilities.runOnUIThread(() ->{
             isSubscriptionActivityStarted = true;
