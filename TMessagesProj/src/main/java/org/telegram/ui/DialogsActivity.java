@@ -10782,14 +10782,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void startSubscriptionActivity(){
-        if(isSubscriptionActivityStarted || getParentActivity() == null)
+        Activity parentActivity = getParentActivity();
+        if (parentActivity == null) {
+            AndroidUtilities.runOnUIThread(this::startSubscriptionActivity, 200);
+            return;
+        }
+
+        if(isSubscriptionActivityStarted)
             return;
 
         AndroidUtilities.runOnUIThread(() ->{
             isSubscriptionActivityStarted = true;
             Intent intent = new Intent(getParentActivity(), SubscriptionActivity.class);
-            getParentActivity().startActivity(intent);
-            getParentActivity().finish();
+            parentActivity.startActivity(intent);
+            parentActivity.finish();
         });
     }
 
