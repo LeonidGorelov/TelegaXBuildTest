@@ -378,16 +378,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent = getIntent();
-        Uri data = intent != null ? intent.getData() : null;
-
-        if (data != null && "tg".equals(data.getScheme())) {
-            startedFromDeepLink = true;
-        }
-        else{
-            startedFromDeepLink = false;
-        }
-
         isActive = true;
         if (BuildVars.DEBUG_VERSION) {
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder(StrictMode.getVmPolicy())
@@ -401,6 +391,21 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         currentAccount = UserConfig.selectedAccount;
         registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
+            Intent intent = getIntent();
+            Uri data = null;
+
+            if(intent != null){
+                if(intent.getData() != null){
+                    data = intent.getData();
+                }
+            }
+            if (data != null && "tg".equals(data.getScheme())) {
+                startedFromDeepLink = true;
+            }
+            else{
+                startedFromDeepLink = false;
+            }
+
             boolean isProxy = false;
             if (intent != null && intent.getAction() != null) {
                 if (Intent.ACTION_SEND.equals(intent.getAction()) || Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction())) {
