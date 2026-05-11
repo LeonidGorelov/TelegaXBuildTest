@@ -256,6 +256,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     private boolean finished;
     private static boolean isSubscriptionActivityStarted;
+    public static boolean startedFromDeepLink = false;
     public static boolean isDialogsContainChannel = true;
     private String videoPath;
     private String voicePath;
@@ -377,23 +378,15 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*AndroidUtilities.runOnUIThread(() -> {
-            Activity activity = (Activity) ApplicationLoader.applicationContext;
-            if (activity != null) {
-                new AlertDialog.Builder(activity)
-                        .setTitle("TelegaX")
-                        .setMessage("dialogsNeedReload — all dialogs loaded")
-                        .setPositiveButton("OK", null)
-                        .show();
-            }
-        });
+        Intent intent = getIntent();
+        Uri data = intent != null ? intent.getData() : null;
 
-        AndroidUtilities.runOnUIThread(() ->
-                Toast.makeText((Activity) ApplicationLoader.applicationContext, "TelegaX: dialogs loaded", Toast.LENGTH_LONG).show()
-        );
-
-
-        DebugOverlay.show("Test");*/
+        if (data != null && "tg".equals(data.getScheme())) {
+            startedFromDeepLink = true;
+        }
+        else{
+            startedFromDeepLink = false;
+        }
 
         isActive = true;
         if (BuildVars.DEBUG_VERSION) {
