@@ -80,7 +80,7 @@ public class ApplicationLoader extends Application {
     private static PushListenerController.IPushListenerServiceProvider pushProvider;
     private static IMapsProvider mapsProvider;
     private static ILocationServiceProvider locationServiceProvider;
-
+    public static boolean isSubscriptionActivityStarted;
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);

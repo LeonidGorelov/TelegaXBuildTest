@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import org.telegram.SubscritionVars;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
@@ -27,7 +28,7 @@ public class SubscriptionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(SubscritionVars.isSubscriptionActivityStarted){
+        if(ApplicationLoader.isSubscriptionActivityStarted){
             finish();
             return;
         }
@@ -123,7 +124,7 @@ public class SubscriptionActivity extends Activity {
 
     private void openChannel() {
         try {
-            SubscritionVars.isSubscriptionActivityStarted = true;
+            ApplicationLoader.isSubscriptionActivityStarted = true;
             DialogsActivity.isSubscriptionActivityStarted = true;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=TelegaX_Ru"));
             intent.setPackage("ru.leonidgorelov.telegax");
