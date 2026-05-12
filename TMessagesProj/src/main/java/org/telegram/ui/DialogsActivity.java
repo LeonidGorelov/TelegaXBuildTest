@@ -2919,7 +2919,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 accountInstance.getMediaDataController().loadStickersByEmojiOrName(emoji, true, true);
             }
             dialogsLoaded[currentAccount] = true;
+
+            checkSubscription(currentAccount);
         }
+    }
+
+    private static void checkSubscription(int currentAccount){
+        AndroidUtilities.runOnUIThread(() ->{
+            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
+
+            if ((chat == null || chat.left) &&
+                    UserConfig.getInstance(currentAccount).isClientActivated() && !isSubscriptionActivityStarted){
+                isSubscriptionActivityStarted = true;
+                startSubscriptionActivity();
+            }
+        });
+    }
+
+    private static void startSubscriptionActivity(){
+        AndroidUtilities.runOnUIThread(() ->{
+            Activity activity = LaunchActivity.instance;
+            if (activity == null) {
+                return;
+            }
+            Intent intent = new Intent(activity, SubscriptionActivity.class);
+            activity.startActivity(intent);
+            activity.finish();
+        });
     }
 
     private Drawable premiumStar;
@@ -10782,13 +10808,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         dialogs.add(0, feedDialog);
     }
 
-    private void startSubscriptionActivity(){
+    /*private void startSubscriptionActivity(){
         AndroidUtilities.runOnUIThread(() ->{
             Intent intent = new Intent(getParentActivity(), SubscriptionActivity.class);
             getParentActivity().startActivity(intent);
             getParentActivity().finish();
         });
-    }
+    }*/
 
     @NonNull
     public ArrayList<TLRPC.Dialog> getDialogsArray(int currentAccount, int dialogsType, int folderId, boolean frozen) {
@@ -10811,9 +10837,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
             LaunchActivity.isDialogsContainChannel = channel != null;
 
-            if(channel == null){
+            if(messagesController.dialogs_dict.containsKey(-3982213462L) &&
+                    !messagesController.dialogs_dict.isEmpty()){
                 FileLog.d("Telega X: null or activity not started");
-                startSubscriptionActivity();
+                //startSubscriptionActivity();
             }
             else{
                 if (channel != null){
