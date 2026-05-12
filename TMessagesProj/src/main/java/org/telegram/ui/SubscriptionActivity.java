@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.telegram.SubscritionVars;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -29,10 +28,12 @@ public class SubscriptionActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if(ApplicationLoader.isSubscriptionActivityStarted){
+            Toast.makeText(this, "isSubscriptionActivityStarted = true", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
+        Toast.makeText(this, "isSubscriptionActivityStarted = false", Toast.LENGTH_LONG).show();
         setContentView(createView());
     }
 
@@ -124,6 +125,7 @@ public class SubscriptionActivity extends Activity {
 
     private void openChannel() {
         try {
+            Toast.makeText(this, " set isSubscriptionActivityStarted = true", Toast.LENGTH_LONG).show();
             ApplicationLoader.isSubscriptionActivityStarted = true;
             DialogsActivity.isSubscriptionActivityStarted = true;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=TelegaX_Ru"));
