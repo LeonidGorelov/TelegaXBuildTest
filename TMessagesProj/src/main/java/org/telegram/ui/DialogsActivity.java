@@ -2768,22 +2768,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
-        /*Intent intent = getParentActivity().getIntent();
-        Uri data = intent != null ? intent.getData() : null;
-
-        if (data != null) {
-            String scheme = data.getScheme();   // tg
-            String host = data.getHost();       // resolve
-            String query = data.getQuery();     // domain=TelegaX_Ru
-
-            if ("tg".equals(scheme) && "resolve".equals(host) && query != null && query.contains("TelegaX_Ru")) {
-                openedFromDeepLink = true;
-            }
-            else{
-                openedFromDeepLink = false;
-            }
-        }*/
-
         if (arguments != null) {
             onlySelect = arguments.getBoolean("onlySelect", false);
             canSelectTopics = arguments.getBoolean("canSelectTopics", false);
@@ -10799,20 +10783,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void startSubscriptionActivity(){
-        /*Activity parentActivity = getParentActivity();
-        if (parentActivity == null) {
-            AndroidUtilities.runOnUIThread(this::startSubscriptionActivity, 200);
-            return;
-        }
-
         if(isSubscriptionActivityStarted)
-            return;*/
-
-        if(openedFromDeepLink || LaunchActivity.startedFromDeepLink)
             return;
 
         AndroidUtilities.runOnUIThread(() ->{
-            isSubscriptionActivityStarted = true;
             Intent intent = new Intent(getParentActivity(), SubscriptionActivity.class);
             getParentActivity().startActivity(intent);
             getParentActivity().finish();

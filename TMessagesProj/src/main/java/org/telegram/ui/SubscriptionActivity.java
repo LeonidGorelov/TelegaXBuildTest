@@ -116,6 +116,7 @@ public class SubscriptionActivity extends Activity {
 
     private void openChannel() {
         try {
+            DialogsActivity.isSubscriptionActivityStarted = true;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=TelegaX_Ru"));
             intent.setPackage("ru.leonidgorelov.telegax");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
