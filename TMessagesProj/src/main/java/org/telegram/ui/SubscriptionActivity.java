@@ -21,10 +21,17 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SubscriptionActivity extends Activity {
+    private static boolean isSubscriptionActivityStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(isSubscriptionActivityStarted){
+            finish();
+            return;
+        }
+
         setContentView(createView());
     }
 
@@ -116,6 +123,7 @@ public class SubscriptionActivity extends Activity {
 
     private void openChannel() {
         try {
+            isSubscriptionActivityStarted = true;
             DialogsActivity.isSubscriptionActivityStarted = true;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=TelegaX_Ru"));
             intent.setPackage("ru.leonidgorelov.telegax");
