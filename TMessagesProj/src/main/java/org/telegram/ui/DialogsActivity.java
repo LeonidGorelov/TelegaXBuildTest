@@ -2930,8 +2930,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             if ((chat == null || chat.left) &&
                     UserConfig.getInstance(currentAccount).isClientActivated()){
-                ApplicationLoader.isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
+                ApplicationLoader.isSubscriptionActivityStarted = true;
             }
         });
     }
