@@ -2929,8 +2929,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
 
             if ((chat == null || chat.left) &&
-                    UserConfig.getInstance(currentAccount).isClientActivated() && !isSubscriptionActivityStarted){
-                isSubscriptionActivityStarted = true;
+                    UserConfig.getInstance(currentAccount).isClientActivated()){
+                ApplicationLoader.isSubscriptionActivityStarted = true;
                 startSubscriptionActivity();
             }
         });
