@@ -128,9 +128,9 @@ public class SubscriptionActivity extends Activity {
 
         root.addView(content);
 
-        if(ApplicationLoader.isSubscriptionActivityStarted){
+        //if(ApplicationLoader.isSubscriptionActivityStarted){
             openChannel();
-        }
+        //}
 
         return root;
     }
