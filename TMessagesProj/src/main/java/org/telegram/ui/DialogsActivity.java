@@ -2920,11 +2920,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             dialogsLoaded[currentAccount] = true;
 
-            checkSubscription(currentAccount);
+            //checkSubscription(currentAccount);
+            startSubscriptionActivity();
         }
     }
 
-    private static void checkSubscription(int currentAccount){
+    /*private static void checkSubscription(int currentAccount){
         AndroidUtilities.runOnUIThread(() ->{
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
 
@@ -2934,7 +2935,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 ApplicationLoader.isSubscriptionActivityStarted = true;
             }
         });
-    }
+    }*/
 
     private static void startSubscriptionActivity(){
         AndroidUtilities.runOnUIThread(() ->{

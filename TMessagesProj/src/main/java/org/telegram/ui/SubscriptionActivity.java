@@ -15,17 +15,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.TLRPC;
 
 public class SubscriptionActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MessagesController messagesController = AccountInstance.getInstance(UserConfig.selectedAccount).getMessagesController();
+        TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
+
+        if (channel != null){
+            Toast.makeText(this, "channel != null", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         if(ApplicationLoader.isSubscriptionActivityStarted){
             Toast.makeText(this, "isSubscriptionActivityStarted = true", Toast.LENGTH_LONG).show();
@@ -124,6 +137,8 @@ public class SubscriptionActivity extends Activity {
     }
 
     private void openChannel() {
+        ApplicationLoader.isSubscriptionActivityStarted = true;
+
         try {
             Toast.makeText(this, " set isSubscriptionActivityStarted = true", Toast.LENGTH_LONG).show();
             ApplicationLoader.isSubscriptionActivityStarted = true;
