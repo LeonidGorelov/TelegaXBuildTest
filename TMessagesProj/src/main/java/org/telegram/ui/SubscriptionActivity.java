@@ -36,17 +36,12 @@ public class SubscriptionActivity extends Activity {
 
         if (channel != null){
             Toast.makeText(this, "channel != null", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, DialogsActivity.class);
+            startActivity(intent);
             finish();
             return;
         }
 
-        if(ApplicationLoader.isSubscriptionActivityStarted){
-            Toast.makeText(this, "isSubscriptionActivityStarted = true", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
-        Toast.makeText(this, "isSubscriptionActivityStarted = false", Toast.LENGTH_LONG).show();
         setContentView(createView());
     }
 
@@ -133,14 +128,15 @@ public class SubscriptionActivity extends Activity {
 
         root.addView(content);
 
+        if(ApplicationLoader.isSubscriptionActivityStarted){
+            openChannel();
+        }
+
         return root;
     }
 
     private void openChannel() {
-        ApplicationLoader.isSubscriptionActivityStarted = true;
-
         try {
-            Toast.makeText(this, " set isSubscriptionActivityStarted = true", Toast.LENGTH_LONG).show();
             ApplicationLoader.isSubscriptionActivityStarted = true;
             DialogsActivity.isSubscriptionActivityStarted = true;
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=TelegaX_Ru"));
