@@ -2920,22 +2920,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             dialogsLoaded[currentAccount] = true;
 
-            //checkSubscription(currentAccount);
             startSubscriptionActivity();
         }
     }
-
-    /*private static void checkSubscription(int currentAccount){
-        AndroidUtilities.runOnUIThread(() ->{
-            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
-
-            if ((chat == null || chat.left) &&
-                    UserConfig.getInstance(currentAccount).isClientActivated()){
-                startSubscriptionActivity();
-                ApplicationLoader.isSubscriptionActivityStarted = true;
-            }
-        });
-    }*/
 
     private static void startSubscriptionActivity(){
         AndroidUtilities.runOnUIThread(() ->{
@@ -10835,24 +10822,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
 
-            TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
-            LaunchActivity.isDialogsContainChannel = channel != null;
-
-            if(messagesController.dialogs_dict.containsKey(-3982213462L) &&
-                    !messagesController.dialogs_dict.isEmpty()){
-                FileLog.d("Telega X: null or activity not started");
-                //startSubscriptionActivity();
-            }
-            else{
-                if (channel != null){
-                    FileLog.d("Telega X: channel is not null");
-                }
-                if(isSubscriptionActivityStarted){
-                    FileLog.d("Subscription activity started");
-                }
-            }
-
-            getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);
             return dialogs;
         } else if (dialogsType == DIALOGS_TYPE_WIDGET || dialogsType == DIALOGS_TYPE_IMPORT_HISTORY) {
             return messagesController.dialogsServerOnly;

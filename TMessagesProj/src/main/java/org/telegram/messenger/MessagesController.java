@@ -13149,8 +13149,6 @@ public class MessagesController extends BaseController implements NotificationCe
                 boolean added = false;
                 dialogsLoaded = true;
 
-                getNotificationCenter().postNotificationName(NotificationCenter.didLoadAllDialogs);
-
                 int archivedDialogsCount = 0;
                 int lastDialogDate = migrate && !allDialogs.isEmpty() ? allDialogs.get(allDialogs.size() - 1).last_message_date : 0;
                 for (int a = 0; a < new_dialogs_dict.size(); a++) {

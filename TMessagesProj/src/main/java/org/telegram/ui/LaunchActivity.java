@@ -255,9 +255,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     public ArrayList<INavigationLayout> sheetFragmentsStack = new ArrayList<>();
 
     private boolean finished;
-    private static boolean isSubscriptionActivityStarted;
-    public static boolean startedFromDeepLink = false;
-    public static boolean isDialogsContainChannel = true;
     private String videoPath;
     private String voicePath;
     private String sendingText;
@@ -392,19 +389,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         if (!UserConfig.getInstance(currentAccount).isClientActivated()) {
             Intent intent = getIntent();
-            Uri data = null;
-
-            if(intent != null){
-                if(intent.getData() != null){
-                    data = intent.getData();
-                }
-            }
-            if (data != null && "tg".equals(data.getScheme())) {
-                startedFromDeepLink = true;
-            }
-            else{
-                startedFromDeepLink = false;
-            }
 
             boolean isProxy = false;
             if (intent != null && intent.getAction() != null) {
@@ -828,42 +812,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         //    refreshRateController = new RefreshRateController(this);
         //}
         checkFrameMetrics();
-        //initSubscriptionCheck();
-        //checkSubscription();
-    }
-
-    private void checkSubscription(){
-        AndroidUtilities.runOnUIThread(() ->{
-            if(isSubscriptionActivityStarted)
-                return;
-
-            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(3982213462L);
-
-            if (/*(chat == null || chat.left) &&*/
-                    UserConfig.getInstance(currentAccount).isClientActivated() && !isDialogsContainChannel){
-                isSubscriptionActivityStarted = true;
-                startSubscriptionActivity();
-                return;
-            }
-
-            checkSubscription();
-        }, 3000);
-    }
-
-    private void initSubscriptionCheck() {
-        NotificationCenter.getInstance(currentAccount).addObserver((id, account, args) -> {
-            if (id == NotificationCenter.didLoadAllDialogs) {
-                checkSubscription();
-            }
-        }, NotificationCenter.didLoadAllDialogs);
-    }
-
-    private void startSubscriptionActivity(){
-        AndroidUtilities.runOnUIThread(() ->{
-            Intent intent = new Intent(this, SubscriptionActivity.class);
-            startActivity(intent);
-            finish();
-        });
     }
 
     public void checkFrameMetrics() {

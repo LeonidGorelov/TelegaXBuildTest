@@ -42,9 +42,10 @@ public class SubscriptionActivity extends Activity {
             return;
         }
 
-        //if(ApplicationLoader.isSubscriptionActivityStarted){
+        if(ApplicationLoader.isSubscriptionActivityStarted){
         openChannel();
-        //}
+        return;
+        }
 
         setContentView(createView());
     }
