@@ -42,6 +42,11 @@ public class SubscriptionActivity extends Activity {
             return;
         }
 
+        //if(ApplicationLoader.isSubscriptionActivityStarted){
+        openChannel();
+        return;
+        //}
+
         setContentView(createView());
     }
 
@@ -127,10 +132,6 @@ public class SubscriptionActivity extends Activity {
         content.addView(buttonJoin);
 
         root.addView(content);
-
-        //if(ApplicationLoader.isSubscriptionActivityStarted){
-            openChannel();
-        //}
 
         return root;
     }
