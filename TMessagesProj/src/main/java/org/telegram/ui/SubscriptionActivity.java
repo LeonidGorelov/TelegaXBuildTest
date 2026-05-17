@@ -36,7 +36,7 @@ public class SubscriptionActivity extends Activity {
 
         if (channel != null){
             Toast.makeText(this, "channel != null", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, DialogsActivity.class);
+            Intent intent = new Intent(this, LaunchActivity.class);
             startActivity(intent);
             finish();
             return;
