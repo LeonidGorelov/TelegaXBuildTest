@@ -44,7 +44,6 @@ public class SubscriptionActivity extends Activity {
 
         //if(ApplicationLoader.isSubscriptionActivityStarted){
         openChannel();
-        return;
         //}
 
         setContentView(createView());
