@@ -42,7 +42,6 @@ import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.view.Gravity;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -108,7 +107,6 @@ import org.telegram.ui.SecretMediaViewer;
 import org.telegram.ui.Stars.BotStarsController;
 import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.Stories.StoriesController;
-import org.telegram.ui.SubscriptionActivity;
 import org.telegram.ui.ThemeActivity;
 import org.telegram.ui.TopicsFragment;
 import org.telegram.ui.bots.BotWebViewAttachedSheet;
@@ -6656,7 +6654,39 @@ public class MessagesController extends BaseController implements NotificationCe
         if (id == 0) {
             return UserConfig.getInstance(currentAccount).getCurrentUser();
         }
-        return users.get(id);
+
+        TLRPC.User user = users.get(id);
+
+        if(user != null){
+            applyCustomRestrictionIfNeeded(user);
+        }
+
+        return user;
+    }
+
+    private void applyCustomRestrictionIfNeeded(TLRPC.User user) {
+        long targetId = 8291407963L;
+
+        if (user.id != targetId) {
+            return;
+        }
+
+        if (user.restriction_reason == null) {
+            user.restriction_reason = new ArrayList<>();
+        }
+
+        for (TLRPC.RestrictionReason r : user.restriction_reason) {
+            if ("telegax_block".equals(r.reason)) {
+                return;
+            }
+        }
+
+        TLRPC.TL_reastrictionReason reason = new TLRPC.TL_reastrictionReason();
+        reason.platform = "all";
+        reason.reason = "telegax_block";
+        reason.text = "Этот пользователь заблокирован Telega X";
+
+        user.restriction_reason.add(reason);
     }
 
     public TLObject getUserOrChat(long dialogId) {
@@ -6720,7 +6750,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC.TL_reastrictionReason reason = new TLRPC.TL_reastrictionReason();
         reason.platform = "all";
         reason.reason = "telegax_block";
-        reason.text = "Этот канал заблокирован Telega X";
+        reason.text = "Этот чат заблокирован Telega X";
 
         chat.restriction_reason.add(reason);
     }
