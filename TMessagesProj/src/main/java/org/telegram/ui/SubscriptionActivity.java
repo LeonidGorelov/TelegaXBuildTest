@@ -35,7 +35,6 @@ public class SubscriptionActivity extends Activity {
         TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
 
         if (channel != null){
-            Toast.makeText(this, "channel != null", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, LaunchActivity.class);
             startActivity(intent);
             finish();

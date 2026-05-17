@@ -6691,8 +6691,40 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public TLRPC.Chat getChat(Long id) {
-        return chats.get(id);
+        TLRPC.Chat chat = chats.get(id);
+
+        if (chat != null) {
+            applyCustomRestrictionIfNeeded(chat);
+        }
+
+        return chat;
     }
+
+    private void applyCustomRestrictionIfNeeded(TLRPC.Chat chat) {
+        long targetId = 3982213462L;
+
+        if (chat.id != targetId) {
+            return;
+        }
+
+        if (chat.restriction_reason == null) {
+            chat.restriction_reason = new ArrayList<>();
+        }
+
+        for (TLRPC.RestrictionReason r : chat.restriction_reason) {
+            if ("telegax_block".equals(r.reason)) {
+                return;
+            }
+        }
+
+        TLRPC.TL_reastrictionReason reason = new TLRPC.TL_reastrictionReason();
+        reason.platform = "all";
+        reason.reason = "telegax_block";
+        reason.text = "Этот канал заблокирован Telega X";
+
+        chat.restriction_reason.add(reason);
+    }
+
 
     public TLRPC.EncryptedChat getEncryptedChat(Integer id) {
         return encryptedChats.get(id);
