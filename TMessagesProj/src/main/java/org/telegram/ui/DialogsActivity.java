@@ -2920,7 +2920,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             dialogsLoaded[currentAccount] = true;
 
-            startSubscriptionActivity();
+            TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
+
+            if(channel != null && !ApplicationLoader.isSubscriptionActivityStarted){
+                startSubscriptionActivity();
+            }
         }
     }
 
@@ -10795,14 +10799,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         messagesController.dialogs_dict.put(DIALOG_ID, feedDialog);
         dialogs.add(0, feedDialog);
     }
-
-    /*private void startSubscriptionActivity(){
-        AndroidUtilities.runOnUIThread(() ->{
-            Intent intent = new Intent(getParentActivity(), SubscriptionActivity.class);
-            getParentActivity().startActivity(intent);
-            getParentActivity().finish();
-        });
-    }*/
 
     @NonNull
     public ArrayList<TLRPC.Dialog> getDialogsArray(int currentAccount, int dialogsType, int folderId, boolean frozen) {
