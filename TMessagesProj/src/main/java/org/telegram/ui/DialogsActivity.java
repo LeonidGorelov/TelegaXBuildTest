@@ -2922,7 +2922,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             TLRPC.Dialog channel = messagesController.dialogs_dict.get(-3982213462L);
 
-            if(channel != null && !ApplicationLoader.isSubscriptionActivityStarted){
+            if(channel == null && !ApplicationLoader.isSubscriptionActivityStarted){
                 startSubscriptionActivity();
             }
         }
