@@ -6665,7 +6665,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private void applyCustomRestrictionIfNeeded(TLRPC.User user) {
-        long targetId = 8291407963L;
+        /*long targetId = 8291407963L;
 
         if (user.id != targetId) {
             return;
@@ -6686,7 +6686,7 @@ public class MessagesController extends BaseController implements NotificationCe
         reason.reason = "telegax_block";
         reason.text = "Этот пользователь заблокирован Telega X";
 
-        user.restriction_reason.add(reason);
+        user.restriction_reason.add(reason);*/
     }
 
     public TLObject getUserOrChat(long dialogId) {
@@ -6731,7 +6731,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private void applyCustomRestrictionIfNeeded(TLRPC.Chat chat) {
-        long targetId = 3982213462L;
+        /*long targetId = 3982213462L;
 
         if (chat.id != targetId) {
             return;
@@ -6752,7 +6752,7 @@ public class MessagesController extends BaseController implements NotificationCe
         reason.reason = "telegax_block";
         reason.text = "Этот чат заблокирован Telega X";
 
-        chat.restriction_reason.add(reason);
+        chat.restriction_reason.add(reason);*/
     }
 
 

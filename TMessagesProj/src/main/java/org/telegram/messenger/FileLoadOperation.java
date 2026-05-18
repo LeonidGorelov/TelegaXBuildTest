@@ -150,19 +150,19 @@ public class FileLoadOperation {
     private final static int stateCanceled = 4;
     private final static int stateCancelling = 5;
 
-    private int downloadChunkSize = 1024 * 32;
-    private int downloadChunkSizeBig = 1024 * 128;
-    private int cdnChunkCheckSize = 1024 * 128;
-    private int maxDownloadRequests = 4;
-    private int maxDownloadRequestsBig = 4;
-    private int bigFileSizeFrom = 10 * 1024 * 1024;
+    private int downloadChunkSize = 1024 * 128;
+    private int downloadChunkSizeBig = 1024 * 256;
+    private int cdnChunkCheckSize = 1024 * 512;
+    private int maxDownloadRequests = 12;
+    private int maxDownloadRequestsBig = 12;
+    private int bigFileSizeFrom = 5 * 1024 * 1024;
     private int maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
 
     //load small parts for stream
-    private int downloadChunkSizeAnimation = 1024 * 128;
-    private int maxDownloadRequestsAnimation = 4;
+    private int downloadChunkSizeAnimation = 1024 * 256;
+    private int maxDownloadRequestsAnimation = 12;
 
-    private final static int preloadMaxBytes = 2 * 1024 * 1024;
+    private final static int preloadMaxBytes = 256 * 1024;
 
     private String fileName;
     private String storeFileName;
